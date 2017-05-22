@@ -1,26 +1,18 @@
 package com.sdsmdg.pulkit.callingtext;
 
-import android.app.IntentService;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * Created by pulkit on 4/2/17.
@@ -36,7 +28,10 @@ public class BackgroundService extends Service {
     String receiver;
     public void onCreate()
     {
+
 //      receiver = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("NUMBER", "8791286328");
+
+        BaseActivity.receiver = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("NUMBER", "7248187747");
         Log.e("Background service","service started"+BaseActivity.receiver);
         dr.addValueEventListener(new ValueEventListener() {
             @Override
