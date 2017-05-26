@@ -71,11 +71,11 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         String mPhoneNumber = tMgr.getLine1Number();
         Log.e("MY BA NO.","PHONE NO."+mPhoneNumber);
         viewPager = (ViewPager) findViewById(R.id.pager);
-        actionBar = getActionBar();
-
+//        actionBar = getActionBar();
+/*
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
+*/
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         int pg_number = 0;
         viewPager.setAdapter(mAdapter);
@@ -137,7 +137,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
             newFragment.setImage(position);
         }
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -146,7 +146,8 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         return super.onCreateOptionsMenu(menu);
 
     }
-
+    */
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -172,4 +173,5 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         }
         return true;
     }
+    */
 }

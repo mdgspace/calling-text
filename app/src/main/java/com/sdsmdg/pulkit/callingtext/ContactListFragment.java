@@ -19,8 +19,13 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
@@ -54,10 +59,12 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     FrameLayout dimLayout;
     LinearLayout searchLayout;
     ArrayList<PhoneContact> phoneContactsList;
+    PhoneSearchSuggestionAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -67,15 +74,13 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         button1 = (ImageButton) view.findViewById(R.id.imageButton21);
         et1 = (EditText) view.findViewById(R.id.editText3);
         recList = (RecyclerView) view.findViewById(R.id.questionList_recycler);
-        searchButton = (ImageView) view.findViewById(R.id.search_button);
-        settingsButton = (ImageView) view.findViewById(R.id.settings_button);
+        //searchButton = (ImageView) view.findViewById(R.id.search_button);
+        //settingsButton = (ImageView) view.findViewById(R.id.settings_button);
         dimLayout = (FrameLayout) view.findViewById(R.id.dim_layout);
         searchLayout = (LinearLayout) view.findViewById(R.id.searchbar);
         backButton = (ImageView) view.findViewById(R.id.backbutton);
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchbox);
-        searchBox.setThreshold(1);
-        searchBox.setDropDownAnchor(R.id.searchbox);
-
+        /*
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +88,8 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 startActivity(settingsActivityIntent);
             }
         });
-
+*/
+        /*
         searchButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -97,7 +103,8 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
             }
         });
-
+*/
+        // Back button to request the focus back to the ContactsListFragment
         backButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -129,6 +136,23 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             @Override
             public void onClick(View view) {
                 searchBox.showDropDown();
+            }
+        });
+
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -194,6 +218,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
             }
         });
+        // Setting the attributes of the search box
+        searchBox.setThreshold(1);
+        searchBox.setDropDownAnchor(R.id.searchbox);
+        adapter = new PhoneSearchSuggestionAdapter(getContext(), R.layout.search_suggestion_item, phoneContactsList);
+        searchBox.setAdapter(adapter);
 
         ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(ca);
         alphaAdapter.setInterpolator(new OvershootInterpolator());
@@ -409,5 +438,32 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         });
         recList.setAdapter(ca);
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.action_search_icon:
+                dimLayout.setVisibility(View.VISIBLE);
+                searchLayout.setVisibility(View.VISIBLE);
+                InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+                searchBox.requestFocus();
+                searchBox.showDropDown();
+                return true;
+
+            case R.id.action_settings_icon:
+                Intent settingsActivityIntent = new Intent(getActivity(), Settings.class);
+                startActivity(settingsActivityIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

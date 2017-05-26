@@ -44,8 +44,7 @@
 
         <activity
             android:name=".BaseActivity"
-            android:label="Calling-Text"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:label="Calling-Text">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />

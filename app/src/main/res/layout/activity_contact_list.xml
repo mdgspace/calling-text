@@ -6,13 +6,10 @@
     xmlns:recyclerviewfastscroller="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:id="@+id/contact_layout"
     tools:context="com.sdsmdg.pulkit.callingtext.ContactListFragment"
     android:background="#ffffff">
-
+<!--
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -20,7 +17,7 @@
         android:theme="@style/Theme.AppCompat"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:title="Telephone Directory">
-        <!--style="@style/ToolBarWithNavigationBack"-->
+
 
         <ImageView
             android:layout_width="wrap_content"
@@ -42,7 +39,7 @@
             android:layout_marginRight="15dp" />
 
     </android.support.v7.widget.Toolbar>
-
+!-->
  <jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,19 +50,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="always"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="34dp" />
     </jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout>
-   <!-- <xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
+    <!--
+    <xyz.danoz.recyclerviewfastscroller.vertical.VerticalRecyclerViewFastScroller
         android:id="@+id/fast_scroller"
         android:layout_width="10dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         recyclerviewfastscroller:rfs_backgroundColor="#0BAA65"
-        />-->
-
+        />
+!-->
+    <!-- Layout tomake the screen dim during search operations !-->
     <FrameLayout
         android:id="@+id/dim_layout"
         android:layout_width="match_parent"
@@ -74,6 +71,7 @@
         android:foreground="@color/black_transparent"
         android:visibility="gone"/>
 
+    <!-- Layout for Searching Contacts !-->
     <LinearLayout
         android:id="@+id/searchbar"
         android:layout_width="match_parent"
