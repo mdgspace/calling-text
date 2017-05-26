@@ -22,6 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.util.Date;
 
+import static com.sdsmdg.pulkit.callingtext.BaseActivity.receiver;
+
 /**
  * Created by pulkit on 4/2/17.
  */
@@ -30,25 +32,29 @@ public class BackgroundService extends Service {
 
     DatabaseReference callertree = FirebaseDatabase.getInstance().getReference().child("caller");
     DatabaseReference receivertree = FirebaseDatabase.getInstance().getReference().child("receiver");
-    DatabaseReference dr = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference dr = FirebaseDatabase.getInstance().getReference().child("receiver");
     public static int count=0;
     DataBaseHandler dbh;
 
     public void onCreate()
     {
         receiver = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("NUMBER", "7248187747");
-        Log.e("Background service","service started"+BaseActivity.receiver);
+        Log.e("Background service","service started"+ receiver);
         dr.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.child("receiver").child(BaseActivity.receiver) != null) {
+                if (snapshot.child(receiver) != null) {
                     count++;
                     Log.e("count",count+"");
                     Log.e("on data change listener", "on data change listener");
-                    BackGroundWorker.value = snapshot.child("receiver").child(BaseActivity.receiver).child("caller").getValue().toString();
-                    BackGroundWorker.gifId = snapshot.child("receiver").child(BaseActivity.receiver).child("gifId").getValue().toString();
-                    BackGroundWorker.msg = snapshot.child("receiver").child(BaseActivity.receiver).child("message").getValue().toString();
-                    Log.e("gif",BackGroundWorker.gifId );
+                    if(snapshot.child("receiver").child(receiver).child("caller").getValue() != null &&
+                            snapshot.child("receiver").child(receiver).child("gifId").getValue() != null &&
+                            snapshot.child("receiver").child(receiver).child("message").getValue() != null) {
+                        BackGroundWorker.value = snapshot.child("receiver").child(receiver).child("caller").getValue().toString();
+                        BackGroundWorker.gifId = snapshot.child("receiver").child(receiver).child("gifId").getValue().toString();
+                        BackGroundWorker.msg = snapshot.child("receiver").child(receiver).child("message").getValue().toString();
+                        Log.e("gif", BackGroundWorker.gifId);
+                    }
                 }
             }
 

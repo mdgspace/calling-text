@@ -13,6 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +76,7 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
                 listener.onItemClick();
                 BaseActivity.setMname(holder.name.getText().toString());
                 BaseActivity.setMnumber(holder.phoneNumber.getText().toString());
+
                 Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getMname()+" "+BaseActivity.getMnumber());
 
             }
@@ -79,6 +86,9 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
             //animate(itemView, i);
         }
     }
+
+
+
 
     private void animate(final View view, final int position) {
         view.animate();

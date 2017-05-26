@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:inputType="phone"
         android:ems="10"
-        android:textColorHint="@color/colorPrimary"
+        android:textColorHint="@color/colorPrimaryDark"
         android:layout_alignBottom="@+id/imageView3"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

@@ -9,10 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class Settings extends AppCompatActivity {
 
-    EditText et_number ;
+    EditText et_number,et_status ;
     Button btn_save;
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users_status");
     SharedPreferences pref;
 
     @Override
@@ -20,6 +24,7 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         et_number = (EditText)findViewById(R.id.et_number);
+        et_status = (EditText)findViewById(R.id.et_status);
         btn_save = (Button)findViewById(R.id.btn_save);
 
 
@@ -27,7 +32,14 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(et_number.getText()!=null){
-                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("NUMBER", et_number.getText().toString()).commit();
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("NUMBER", et_number.getText().toString()).apply();
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("STATUS", et_status.getText().toString()).apply();
+
+                    // Adding the user status to the firebase database
+                    // Adding the user's status to the firebase database as a child of users_status reference
+
+                    reference.child(et_number.getText().toString()).setValue(et_status.getText().toString());
+
                     Toast.makeText(getBaseContext(),"NUMBER SAVED",Toast.LENGTH_LONG).show();
 
                 }else {
@@ -35,8 +47,8 @@ public class Settings extends AppCompatActivity {
                 }
 
 
-
             }
+
         });
 
 

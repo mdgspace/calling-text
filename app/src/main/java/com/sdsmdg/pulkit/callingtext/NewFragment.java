@@ -1,12 +1,16 @@
 package com.sdsmdg.pulkit.callingtext;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,6 +23,14 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Date;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -75,15 +87,17 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
 
             case R.id.button4:
-                if (haveNetworkConnection() == true) {
+                if (haveNetworkConnection()) {
                     if (editText2.getText().toString() != null && editText1.getText().toString() != null) {
+
                         BackGroundWorker b = new BackGroundWorker(getActivity(), 2);
                         Log.e("number", editText1.getText().toString());
                         b.execute(yourNumber, editText1.getText().toString(), editText2.getText().toString(), gifNumber1);
-                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        final Intent callIntent = new Intent(Intent.ACTION_CALL);
                         BaseActivity.calledByapp = true;
                         callIntent.setData(Uri.parse("tel:" + editText1.getText().toString()));
                         Log.e("receiver", "tel:" + editText1.getText().toString());
+                        /*
                         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(BackGroundWorker.value));
                         Cursor phones = getActivity().getContentResolver().query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
                         while (phones.moveToNext()) {
@@ -92,7 +106,32 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                         CallerDetails cd = new CallerDetails(name,editText1.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()));
                         DataBaseHandler dbh=DataBaseHandler.getInstance(getContext());
                         dbh.addCaller(cd);
-                        startActivity(callIntent);
+*/
+                        // Find the current status of the user being called
+                        String callerStatus = searchCallerStatus(editText1.getText().toString());
+
+                        // Show a dialog to the user to ask him if he wants to make the call
+                        if(callerStatus != null) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage(callerStatus).setTitle("Receiver's Present Status")
+                                    .setPositiveButton("CALL", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            startActivity(callIntent);
+                                        }
+                                    }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                        else {
+                            startActivity(callIntent);
+                        }
+
                     } else {
                         Log.e("in else", "in else");
                         Toast.makeText(getActivity(), "please type your message or number", Toast.LENGTH_SHORT).show();
@@ -134,6 +173,25 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    private String searchCallerStatus(final String callerNumber) {
+
+        final String[] callerStatus = new String[1];
+        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("users_status");
+        DatabaseReference usersStatusReference = dr.child(callerNumber);
+        usersStatusReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                callerStatus[0] = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return callerStatus[0];
     }
 
     public void setImage(String gifNumber) {

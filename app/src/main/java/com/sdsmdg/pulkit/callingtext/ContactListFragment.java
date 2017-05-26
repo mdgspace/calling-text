@@ -1,11 +1,14 @@
 package com.sdsmdg.pulkit.callingtext;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -137,13 +140,17 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        /*
         Uri CONTENT_URI = ContactsContract.RawContacts.CONTENT_URI;
         Log.e("pul", "in loader");
         return new CursorLoader(getActivity(), CONTENT_URI, null, null, null, null);
+        */
+        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        /*
         Log.e("pul", "in loadFinished");
         Log.e("pul", cursor.getCount() + " ");
         cursor.moveToFirst();
@@ -153,6 +160,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             res.append("\n" + cursor.getString(21) + "-" + cursor.getString(22));
             cursor.moveToNext();
         }
+        */
     }
 
     @Override
@@ -163,8 +171,71 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
     private List<ArrayList> createList() {
         result = new ArrayList<ArrayList>();
+
+        // Code for contacts retrieval
+        // Display the contacts in ascending order
+        ContentResolver cr = getContext().getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+
+        if (cur.getCount() > 0) {
+            String prev_name = "";            // To keep account of the duplicate names
+
+            String prev_number = "";          // To keep account of the duplicate numbers
+
+            while (cur.moveToNext()) {
+
+                String id = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts._ID));
+
+                String name = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                if(name != null){
+
+                    ArrayList<String> a = new ArrayList<String>();
+                    int i = 0;
+                    a.add(name);
+
+                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        //Query phone here.  Covered next
+                        Cursor pCur = cr.query(
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                new String[]{id}, null);
+
+                        while (pCur.moveToNext()) {
+                            // Do something with phones
+                            String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                            if (phone != null) {
+                                if (!name.equals(prev_name) || !phone.equals(prev_number)) {
+                                    if (i == 0) {
+                                        a.add(phone);
+                                        result.add(a);
+                                        i = 1;
+                                    } else {
+                                        if (!(prev_number.equals(phone))) {
+                                            a.set(1, phone);
+                                            result.add(a);
+                                        }
+                                    }
+                                    prev_number = phone;
+                                }
+                            }
+                        }
+                        pCur.close();
+                    }
+                    prev_name = name;
+                }
+            }
+        }
+        cur.close();
+        // Previous Code
+/*
         ArrayList<String> a = new ArrayList<String>();
-        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         while (phones.moveToNext()) {
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -175,9 +246,16 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
         }
         phones.close();
+*/
+        // Removing duplicate contacts by simple comparison
+        int z;
+        for(z = 0; z < result.size()-1; z++){
+            if(result.get(z) == result.get(z+1)){
+                result.remove(z);
+            }
+        }
+        int size = result.size();   // To check the size of the results
         return result;
-
-
     }
 
     public void addToList() {
