@@ -3,13 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.sdsmdg.pulkit.callingtext.BaseActivity">
-
+<!--
+    <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#388FF5"
+            app:titleTextColor="@color/white"
+            android:elevation="4dp"
+            android:layout_marginTop="16dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        !-->
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="?attr/actionBarSize"
         android:theme="@style/AppTheme.AppBarOverlay">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#388FF5"
+            app:titleTextColor="@color/white"
+            android:elevation="4dp"
+            android:layout_marginTop="16dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+
+        <!--
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,15 +59,10 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:text="Settings"
-
-
-                />
-
+                android:text="Settings" />
         </RelativeLayout>
-
-
-    </android.support.design.widget.AppBarLayout>
+        !-->
+</android.support.design.widget.AppBarLayout>
 
 
     <include layout="@layout/content_base" />

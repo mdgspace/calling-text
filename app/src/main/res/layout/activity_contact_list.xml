@@ -4,14 +4,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:recyclerviewfastscroller="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:id="@+id/contact_layout"
     tools:context="com.sdsmdg.pulkit.callingtext.ContactListFragment"
-    android:background="#ffffff"
-    >
+    android:background="#ffffff">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/Theme.AppCompat"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Telephone Directory">
+        <!--style="@style/ToolBarWithNavigationBack"-->
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings_button"
+            android:src="@drawable/ic_settings_black_24dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_button"
+            android:src="@drawable/ic_search_black_24dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp" />
+
+    </android.support.v7.widget.Toolbar>
+
  <jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,17 +66,63 @@
         recyclerviewfastscroller:rfs_backgroundColor="#0BAA65"
         />-->
 
-    <EditText
+    <FrameLayout
+        android:id="@+id/dim_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:foreground="@color/black_transparent"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/searchbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/round_corners"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/backbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_arrow_back_black_24dp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/searchbox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:hint="Search Contacts"
+            android:imeActionLabel="Search"
+            android:imeOptions="actionNone"
+            android:inputType="textAutoComplete"
+            android:textColorHint="#A1A1A1"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
         android:ems="10"
-            android:hint="Search"
-            android:background="@drawable/edit_shape"
-            android:id="@+id/editText3"
-            android:paddingLeft="10dp"
+        android:hint="Search"
+        android:background="@drawable/edit_shape"
+        android:id="@+id/editText3"
+        android:paddingLeft="10dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="50dp"
         android:layout_alignParentStart="true" />
-    </RelativeLayout>
+
+</RelativeLayout>
 

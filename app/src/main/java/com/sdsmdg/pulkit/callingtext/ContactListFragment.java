@@ -4,9 +4,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,14 +18,20 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +49,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     List<ArrayList> result;
     View view;
     WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
-
+    private ImageView searchButton, settingsButton, backButton;
+    AutoCompleteTextView searchBox;
+    FrameLayout dimLayout;
+    LinearLayout searchLayout;
+    ArrayList<PhoneContact> phoneContactsList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,13 +61,77 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.activity_contact_list, container, false);
         button1 = (ImageButton) view.findViewById(R.id.imageButton21);
         et1 = (EditText) view.findViewById(R.id.editText3);
         recList = (RecyclerView) view.findViewById(R.id.questionList_recycler);
+        searchButton = (ImageView) view.findViewById(R.id.search_button);
+        settingsButton = (ImageView) view.findViewById(R.id.settings_button);
+        dimLayout = (FrameLayout) view.findViewById(R.id.dim_layout);
+        searchLayout = (LinearLayout) view.findViewById(R.id.searchbar);
+        backButton = (ImageView) view.findViewById(R.id.backbutton);
+        searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchbox);
+        searchBox.setThreshold(1);
+        searchBox.setDropDownAnchor(R.id.searchbox);
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent settingsActivityIntent = new Intent(getActivity(), Settings.class);
+                startActivity(settingsActivityIntent);
+            }
+        });
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                dimLayout.setVisibility(View.VISIBLE);
+                searchLayout.setVisibility(View.VISIBLE);
+                InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+                searchBox.requestFocus();
+                searchBox.showDropDown();
+
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                dimLayout.setVisibility(View.GONE);
+                searchLayout.setVisibility(View.GONE);
+                searchBox.clearFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+
+            }
+        });
+
+        dimLayout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                dimLayout.setVisibility(View.GONE);
+                searchLayout.setVisibility(View.GONE);
+                searchBox.clearFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+
+
+            }
+        });
+
+        searchBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchBox.showDropDown();
+            }
+        });
+
       /*  et1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,7 +163,24 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         Log.e("p", createList() + "");
-        ContactListAdapter ca = new ContactListAdapter(createList(), getActivity(), new ContactListAdapter.OnItemClickListener() {
+
+        if(savedInstanceState != null){
+            phoneContactsList = new ArrayList<PhoneContact>();
+            result = new ArrayList<ArrayList>();
+            ArrayList<String> arrayList;
+            phoneContactsList = savedInstanceState.getParcelableArrayList("phoneContactsList");
+            for(PhoneContact phoneContact : phoneContactsList){
+                arrayList = new ArrayList<String>();
+                arrayList.add(phoneContact.name);
+                arrayList.add(phoneContact.phone);
+                result.add(arrayList);
+            }
+        }
+        else{
+            result = createList();
+        }
+
+        ContactListAdapter ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
                 Log.i("OnClick", "inside the onclick of the adapter");
@@ -101,6 +194,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
             }
         });
+
         ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(ca);
         alphaAdapter.setInterpolator(new OvershootInterpolator());
         alphaAdapter.setDuration(1000);
@@ -171,7 +265,8 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
     private List<ArrayList> createList() {
         result = new ArrayList<ArrayList>();
-
+        phoneContactsList = new ArrayList<PhoneContact>();
+        PhoneContact phoneContact ;
         // Code for contacts retrieval
         // Display the contacts in ascending order
         ContentResolver cr = getContext().getContentResolver();
@@ -214,11 +309,15 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                                     if (i == 0) {
                                         a.add(phone);
                                         result.add(a);
+                                        phoneContact = new PhoneContact(name, phone);
+                                        phoneContactsList.add(phoneContact);
                                         i = 1;
                                     } else {
                                         if (!(prev_number.equals(phone))) {
                                             a.set(1, phone);
                                             result.add(a);
+                                            phoneContact = new PhoneContact(name, phone);
+                                            phoneContactsList.add(phoneContact);
                                         }
                                     }
                                     prev_number = phone;
@@ -256,6 +355,12 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         }
         int size = result.size();   // To check the size of the results
         return result;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("phoneContactsList", phoneContactsList);
     }
 
     public void addToList() {
@@ -303,5 +408,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
         });
         recList.setAdapter(ca);
+
     }
 }

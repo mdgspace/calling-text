@@ -41,10 +41,11 @@
             android:name=".CustomDialogBox"
             android:label="@string/title_activity_custom_dialog_box"
             android:theme="@style/AppDialogTheme" />
-        <activity
 
+        <activity
             android:name=".BaseActivity"
-            android:label="Calling-Text">
+            android:label="Calling-Text"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -11,14 +11,19 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-public class BaseActivity extends FragmentActivity implements ActionBar.TabListener,GifFragment.onImageselectionListener {
+public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener,GifFragment.onImageselectionListener {
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
@@ -50,6 +55,8 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+
+        /*
         btn_settings = (Button)findViewById(R.id.btn_settings);
         btn_settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,11 +65,17 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
                 startActivity(o);
             }
         });
+        */
+
         TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = tMgr.getLine1Number();
         Log.e("MY BA NO.","PHONE NO."+mPhoneNumber);
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         int pg_number = 0;
         viewPager.setAdapter(mAdapter);
@@ -125,4 +138,38 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()){
+
+            case R.id.action_settings_icon:
+
+                // Direct the user to the Settings Activity class
+                Intent settingsActivityIntent = new Intent(BaseActivity.this,Settings.class);
+                startActivity(settingsActivityIntent);
+                break;
+
+            case R.id.action_search_icon:
+
+
+                break;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+        return true;
+    }
 }
