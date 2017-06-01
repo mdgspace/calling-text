@@ -124,6 +124,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         }
         else {
             result = ((BaseActivity)getActivity()).getSavedContacts();
+            phoneContactsList = ((BaseActivity)getActivity()).getSavedPhoneContacts();
             if (result == null || result.size() == 0)
                 new CreateContactList().execute();
         }
@@ -500,12 +501,12 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             super.onPostExecute(output);
             mProgress.hide();
             alphaAdapter.notifyDataSetChanged();
-            onContactsLoaded.saveContacts(output);
+            onContactsLoaded.saveContacts(output, phoneContactsList);
         }
     }
 
     public interface OnContactsLoaded {
-        public void saveContacts(List<ArrayList> contactsList );
+        public void saveContacts(List<ArrayList> contactsList, ArrayList<PhoneContact> phoneContacts);
     }
 
 

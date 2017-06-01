@@ -37,6 +37,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     public static String mname,mnumber;
     public static Boolean calledByapp = false;
     public static List<ArrayList> savedContacts;
+    public static ArrayList<PhoneContact> savedPhoneContacts;
 
     public static String getMname() {
         return mname;
@@ -56,6 +57,10 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
 
     public static List<ArrayList> getSavedContacts() {
         return savedContacts;
+    }
+
+    public static ArrayList<PhoneContact> getSavedPhoneContacts(){
+        return savedPhoneContacts;
     }
 
     public static String receiver="7248187747";
@@ -146,7 +151,8 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     @Override
-    public void saveContacts(List<ArrayList> contactsList) {
+    public void saveContacts(List<ArrayList> contactsList, ArrayList<PhoneContact> phoneContacts) {
         savedContacts = contactsList;
+        savedPhoneContacts = phoneContacts;
     }
 }
