@@ -301,78 +301,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
     }
 
-/*
-    private List<ArrayList> createList() {
-        result = new ArrayList<ArrayList>();
-
-        phoneContactsList = new ArrayList<PhoneContact>();
-        PhoneContact phoneContact ;
-        // Code for contacts retrieval
-        // Display the contacts in ascending order
-        ContentResolver cr = getContext().getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-
-        if (cur.getCount() > 0) {
-            String prev_name = "";            // To keep account of the duplicate names
-
-            String prev_number = "";          // To keep account of the duplicate numbers
-
-            while (cur.moveToNext()) {
-
-                String id = cur.getString(
-                        cur.getColumnIndex(ContactsContract.Contacts._ID));
-
-                String name = cur.getString(
-                        cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
-                if(name != null){
-
-                    ArrayList<String> a = new ArrayList<String>();
-                    int i = 0;
-                    a.add(name);
-
-                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                        //Query phone here.  Covered next
-                        Cursor pCur = cr.query(
-                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                null,
-                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                                new String[]{id}, null);
-
-                        while (pCur.moveToNext()) {
-                            // Do something with phones
-                            String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                            if (phone != null) {
-                                if (!name.equals(prev_name) || !phone.equals(prev_number)) {
-                                    if (i == 0) {
-                                        a.add(phone);
-                                        result.add(a);
-                                        phoneContact = new PhoneContact(name, phone);
-                                        phoneContactsList.add(phoneContact);
-                                        i = 1;
-                                    } else {
-                                        if (!(prev_number.equals(phone))) {
-                                            a.set(1, phone);
-                                            result.add(a);
-                                            phoneContact = new PhoneContact(name, phone);
-                                            phoneContactsList.add(phoneContact);
-                                        }
-                                    }
-                                    prev_number = phone;
-                                }
-                            }
-                        }
-                        pCur.close();
-                    }
-                    prev_name = name;
-                }
-            }
-        }
-        cur.close();
-
-        // Previous Code
+     // Previous Code
 /*
         ArrayList<String> a = new ArrayList<String>();
         Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
@@ -387,29 +316,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         }
         phones.close();
 */
-        // Removing duplicate contacts by simple comparison
-/*
-        int z;
-        for(z = 0; z < result.size()-1; z++){
-            if(result.get(z) == result.get(z+1)){
-                result.remove(z);
-            }
-        }
-
-        int size = result.size();   // To check the size of the results
-        return result;
-    }
-    */
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("phoneContactsList", phoneContactsList);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     public void addToList() {
@@ -571,21 +482,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
             cur.close();
 
-            // Previous Code
-/*
-        ArrayList<String> a = new ArrayList<String>();
-        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-        while (phones.moveToNext()) {
-            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            a.add(name);
-            a.add(phoneNumber);
-            result.add(a);
-            a = new ArrayList<String>();
-
-        }
-        phones.close();
-*/
             // Removing duplicate contacts by simple comparison
 
             int z;
