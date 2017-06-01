@@ -1,18 +1,25 @@
 package com.sdsmdg.pulkit.callingtext;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.Date;
 import java.util.List;
@@ -26,6 +33,13 @@ public class HistoryFragment extends Fragment {
     DataBaseHandler dbh;
     View view;
     WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,6 +95,23 @@ public class HistoryFragment extends Fragment {
         recList.setAdapter(alphaAdapter);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.action_settings_icon:
+                Intent settingsActivityIntent = new Intent(getActivity(), Settings.class);
+                startActivity(settingsActivityIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

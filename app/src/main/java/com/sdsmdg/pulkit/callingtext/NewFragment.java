@@ -13,10 +13,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -54,6 +57,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public static String gifNumber1;
     private static final int CONTACTS_LOADER_ID = 1;
     private WindowManager windowManager;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -172,7 +176,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
     }
 
     private String searchCallerStatus(final String callerNumber) {
@@ -285,16 +289,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings_icon) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     //@Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -332,5 +326,24 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 //        editName.setText(BaseActivity.getMname());
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.action_settings_icon:
+                Intent settingsActivityIntent = new Intent(getActivity(), Settings.class);
+                startActivity(settingsActivityIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

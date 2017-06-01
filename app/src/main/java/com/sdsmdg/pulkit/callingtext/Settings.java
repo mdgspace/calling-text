@@ -27,6 +27,7 @@ public class Settings extends AppCompatActivity {
         et_status = (EditText)findViewById(R.id.et_status);
         btn_save = (Button)findViewById(R.id.btn_save);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override

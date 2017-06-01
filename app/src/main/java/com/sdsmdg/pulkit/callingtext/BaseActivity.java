@@ -23,16 +23,20 @@ import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener,GifFragment.onImageselectionListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener,GifFragment.onImageselectionListener, ContactListFragment.OnContactsLoaded {
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
-    private ActionBar actionBar;
+    public android.support.v7.app.ActionBar actionBar;
     FragmentManager fragmentManager;
     GifFragment fragment;
     Button btn_settings;
     public static String mname,mnumber;
     public static Boolean calledByapp = false;
+    public static List<ArrayList> savedContacts;
 
     public static String getMname() {
         return mname;
@@ -48,6 +52,10 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
 
     public static void setMnumber(String mnumber) {
         BaseActivity.mnumber = mnumber;
+    }
+
+    public static List<ArrayList> getSavedContacts() {
+        return savedContacts;
     }
 
     public static String receiver="7248187747";
@@ -71,14 +79,12 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         String mPhoneNumber = tMgr.getLine1Number();
         Log.e("MY BA NO.","PHONE NO."+mPhoneNumber);
         viewPager = (ViewPager) findViewById(R.id.pager);
-//        actionBar = getActionBar();
-/*
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-*/
+        // actionBar = getSupportActionBar();
+
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         int pg_number = 0;
         viewPager.setAdapter(mAdapter);
+
 //        if(PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("NUMBER", "7248187747")!=null){
 //            receiver = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("NUMBER", "7248187747");
 //        }
@@ -100,6 +106,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         tabLayout.setupWithViewPager(viewPager);
         startService(new Intent(this, BackgroundService.class));
         }
+
     private void call(String s) {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + s));
@@ -137,41 +144,9 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
             newFragment.setImage(position);
         }
     }
-/*
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
-
+    public void saveContacts(List<ArrayList> contactsList) {
+        savedContacts = contactsList;
     }
-    */
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch(item.getItemId()){
-
-            case R.id.action_settings_icon:
-
-                // Direct the user to the Settings Activity class
-                Intent settingsActivityIntent = new Intent(BaseActivity.this,Settings.class);
-                startActivity(settingsActivityIntent);
-                break;
-
-            case R.id.action_search_icon:
-
-
-                break;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-        return true;
-    }
-    */
 }

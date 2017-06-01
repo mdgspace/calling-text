@@ -1,21 +1,20 @@
 package com.sdsmdg.pulkit.callingtext;
 
+import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.Image;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -37,12 +36,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
+
+import static com.sdsmdg.pulkit.callingtext.BaseActivity.getSavedContacts;
 
 public class ContactListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -51,7 +53,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     Button button;
     public ImageButton button1;
     EditText et1;
-    List<ArrayList> result;
+    static List<ArrayList> result;
     View view;
     WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private ImageView searchButton, settingsButton, backButton;
@@ -60,11 +62,42 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     LinearLayout searchLayout;
     ArrayList<PhoneContact> phoneContactsList;
     PhoneSearchSuggestionAdapter adapter;
+    Toolbar toolbar;
+    ProgressDialog mProgress;
+    ScaleInAnimationAdapter alphaAdapter;
+    OnContactsLoaded onContactsLoaded;
+    ContactListAdapter ca;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mProgress = new ProgressDialog(context);
+
+        try{
+            onContactsLoaded = (OnContactsLoaded)context;
+        }catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnContactsLoaded");
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState != null){
+            phoneContactsList = savedInstanceState.getParcelableArrayList("phoneContactsList");
+            for(PhoneContact phoneContact : phoneContactsList){
+                ArrayList<String> a =new ArrayList<>();
+                a.add(phoneContact.name);
+                a.add(phoneContact.phone);
+                result.add(a);
+                recList.setAdapter(alphaAdapter);
+            }
+        }
     }
 
     @Override
@@ -72,38 +105,29 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
         view = inflater.inflate(R.layout.activity_contact_list, container, false);
         button1 = (ImageButton) view.findViewById(R.id.imageButton21);
-        et1 = (EditText) view.findViewById(R.id.editText3);
         recList = (RecyclerView) view.findViewById(R.id.questionList_recycler);
-        //searchButton = (ImageView) view.findViewById(R.id.search_button);
-        //settingsButton = (ImageView) view.findViewById(R.id.settings_button);
         dimLayout = (FrameLayout) view.findViewById(R.id.dim_layout);
         searchLayout = (LinearLayout) view.findViewById(R.id.searchbar);
         backButton = (ImageView) view.findViewById(R.id.backbutton);
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchbox);
-        /*
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent settingsActivityIntent = new Intent(getActivity(), Settings.class);
-                startActivity(settingsActivityIntent);
-            }
-        });
-*/
-        /*
-        searchButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                dimLayout.setVisibility(View.VISIBLE);
-                searchLayout.setVisibility(View.VISIBLE);
-                InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                manager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-                searchBox.requestFocus();
-                searchBox.showDropDown();
+        result = new ArrayList<>();
 
+        if (savedInstanceState != null){
+            phoneContactsList = savedInstanceState.getParcelableArrayList("phoneContactsList");
+            for(PhoneContact phoneContact : phoneContactsList){
+                ArrayList<String> a =new ArrayList<>();
+                a.add(phoneContact.name);
+                a.add(phoneContact.phone);
+                result.add(a);
             }
-        });
-*/
+        }
+        else {
+            result = ((BaseActivity)getActivity()).getSavedContacts();
+            if (result == null || result.size() == 0)
+                new CreateContactList().execute();
+        }
+        mProgress.setMessage("Displaying Contacts...");
         // Back button to request the focus back to the ContactsListFragment
         backButton.setOnClickListener(new View.OnClickListener() {
 
@@ -118,6 +142,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
         });
 
+        // Dim layout which is present during search operattions
         dimLayout.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -186,25 +211,9 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getBaseContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        Log.e("p", createList() + "");
+        Log.e("p", result + "");
 
-        if(savedInstanceState != null){
-            phoneContactsList = new ArrayList<PhoneContact>();
-            result = new ArrayList<ArrayList>();
-            ArrayList<String> arrayList;
-            phoneContactsList = savedInstanceState.getParcelableArrayList("phoneContactsList");
-            for(PhoneContact phoneContact : phoneContactsList){
-                arrayList = new ArrayList<String>();
-                arrayList.add(phoneContact.name);
-                arrayList.add(phoneContact.phone);
-                result.add(arrayList);
-            }
-        }
-        else{
-            result = createList();
-        }
-
-        ContactListAdapter ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
+        ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
                 Log.i("OnClick", "inside the onclick of the adapter");
@@ -220,15 +229,16 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         });
         // Setting the attributes of the search box
         searchBox.setThreshold(1);
-        searchBox.setDropDownAnchor(R.id.searchbox);
+        searchBox.setDropDownAnchor(R.id.searchbar);
         adapter = new PhoneSearchSuggestionAdapter(getContext(), R.layout.search_suggestion_item, phoneContactsList);
         searchBox.setAdapter(adapter);
 
-        ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(ca);
+        alphaAdapter = new ScaleInAnimationAdapter(ca);
         alphaAdapter.setInterpolator(new OvershootInterpolator());
         alphaAdapter.setDuration(1000);
         alphaAdapter.setFirstOnly(false);
         recList.setAdapter(alphaAdapter);
+        alphaAdapter.notifyDataSetChanged();
 
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) view.findViewById(R.id.main_swipe);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
@@ -291,9 +301,10 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
     }
 
-
+/*
     private List<ArrayList> createList() {
         result = new ArrayList<ArrayList>();
+
         phoneContactsList = new ArrayList<PhoneContact>();
         PhoneContact phoneContact ;
         // Code for contacts retrieval
@@ -360,6 +371,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
         }
         cur.close();
+
         // Previous Code
 /*
         ArrayList<String> a = new ArrayList<String>();
@@ -376,20 +388,28 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         phones.close();
 */
         // Removing duplicate contacts by simple comparison
+/*
         int z;
         for(z = 0; z < result.size()-1; z++){
             if(result.get(z) == result.get(z+1)){
                 result.remove(z);
             }
         }
+
         int size = result.size();   // To check the size of the results
         return result;
     }
+    */
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("phoneContactsList", phoneContactsList);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     public void addToList() {
@@ -398,7 +418,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        ContactListAdapter ca = new ContactListAdapter(createList(), getActivity(), new ContactListAdapter.OnItemClickListener() {
+        ContactListAdapter ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
                 Log.i("OnClick", "inside the onclick of the adapter");
@@ -466,4 +486,131 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private class CreateContactList extends AsyncTask<Void, Void, List<ArrayList>>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgress.show();
+        }
+
+        @Override
+        protected List<ArrayList> doInBackground(Void... params) {
+            result = createList();
+            return result;
+        }
+
+        private List<ArrayList> createList() {
+            result = new ArrayList<ArrayList>();
+
+            phoneContactsList = new ArrayList<PhoneContact>();
+            PhoneContact phoneContact ;
+            // Code for contacts retrieval
+            // Display the contacts in ascending order
+            ContentResolver cr = getContext().getContentResolver();
+            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                    null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+
+            if (cur.getCount() > 0) {
+                String prev_name = "";            // To keep account of the duplicate names
+
+                String prev_number = "";          // To keep account of the duplicate numbers
+
+                while (cur.moveToNext()) {
+
+                    String id = cur.getString(
+                            cur.getColumnIndex(ContactsContract.Contacts._ID));
+
+                    String name = cur.getString(
+                            cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+                    if(name != null){
+
+                        ArrayList<String> a = new ArrayList<String>();
+                        int i = 0;
+                        a.add(name);
+
+                        if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                            //Query phone here.  Covered next
+                            Cursor pCur = cr.query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                    new String[]{id}, null);
+
+                            while (pCur.moveToNext()) {
+                                // Do something with phones
+                                String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                                if (phone != null) {
+                                    if (!name.equals(prev_name) || !phone.equals(prev_number)) {
+                                        if (i == 0) {
+                                            a.add(phone);
+                                            result.add(a);
+                                            phoneContact = new PhoneContact(name, phone);
+                                            phoneContactsList.add(phoneContact);
+                                            i = 1;
+                                        } else {
+                                            if (!(prev_number.equals(phone))) {
+                                                a.set(1, phone);
+                                                result.add(a);
+                                                phoneContact = new PhoneContact(name, phone);
+                                                phoneContactsList.add(phoneContact);
+                                            }
+                                        }
+                                        prev_number = phone;
+                                    }
+                                }
+                            }
+                            pCur.close();
+                        }
+                        prev_name = name;
+                    }
+                }
+            }
+            cur.close();
+
+            // Previous Code
+/*
+        ArrayList<String> a = new ArrayList<String>();
+        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        while (phones.moveToNext()) {
+            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            a.add(name);
+            a.add(phoneNumber);
+            result.add(a);
+            a = new ArrayList<String>();
+
+        }
+        phones.close();
+*/
+            // Removing duplicate contacts by simple comparison
+
+            int z;
+            for(z = 0; z < result.size()-1; z++){
+                if(result.get(z) == result.get(z+1)){
+                    result.remove(z);
+                }
+            }
+
+            int size = result.size();   // To check the size of the results
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(List<ArrayList> output) {
+            super.onPostExecute(output);
+            mProgress.hide();
+            alphaAdapter.notifyDataSetChanged();
+            onContactsLoaded.saveContacts(output);
+        }
+    }
+
+    public interface OnContactsLoaded {
+        public void saveContacts(List<ArrayList> contactsList );
+    }
+
+
 }
