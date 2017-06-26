@@ -31,7 +31,7 @@ public class DataBaseHandler extends SQLiteOpenHelper{
     private static final String PASSWORD = "password";
     private static DataBaseHandler instance = null;
 
-    private DataBaseHandler(Context context) {
+    DataBaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

@@ -22,7 +22,7 @@ public class CallManager extends BroadcastReceiver implements BackGroundWorker.r
         context1 = context;
         Log.e("pul", "in receive");
         Log.e("pulkit", "in received");
-        String receiver = "7253046197";
+        String receiver = "7248187747";
 
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = tMgr.getLine1Number();

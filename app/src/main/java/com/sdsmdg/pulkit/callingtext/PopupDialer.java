@@ -40,12 +40,12 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.popup);
         rl = (RelativeLayout)findViewById(R.id.popup_rl);
-        et_message = (EditText) findViewById(R.id.message);
+        et_message = (EditText)findViewById(R.id.message);
         call = (Button) findViewById(R.id.btn_call);
         g = (GifImageView) findViewById(R.id.gif_image);
         number = getIntent().getExtras().getString("number");
         Log.i("number and message ", message + ":" + number);
-        yourNumber = "7253046197";
+        yourNumber = "7248187747";
 
 
         call.setOnClickListener(new View.OnClickListener() {
