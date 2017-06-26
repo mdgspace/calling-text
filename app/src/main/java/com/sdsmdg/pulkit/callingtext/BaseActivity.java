@@ -80,6 +80,17 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         });
         */
 
+        // To retain the contact list when the device is rotated
+        if (savedInstanceState != null){
+            savedPhoneContacts = savedInstanceState.getParcelableArrayList("phoneContactsList");
+            for(PhoneContact phoneContact : savedPhoneContacts){
+                ArrayList<String> a =new ArrayList<>();
+                a.add(phoneContact.name);
+                a.add(phoneContact.phone);
+                savedContacts.add(a);
+            }
+        }
+
         TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = tMgr.getLine1Number();
         Log.e("MY BA NO.","PHONE NO."+mPhoneNumber);
@@ -110,7 +121,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         startService(new Intent(this, BackgroundService.class));
-        }
+     }
 
     private void call(String s) {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -154,5 +165,11 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     public void saveContacts(List<ArrayList> contactsList, ArrayList<PhoneContact> phoneContacts) {
         savedContacts = contactsList;
         savedPhoneContacts = phoneContacts;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("phoneContactsList", savedPhoneContacts);
     }
 }

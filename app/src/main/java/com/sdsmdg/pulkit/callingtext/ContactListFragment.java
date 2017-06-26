@@ -100,24 +100,12 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchbox);
         result = new ArrayList<>();
 
-        // To retain the contact list when the device is rotated
-        if (savedInstanceState != null){
-            phoneContactsList = savedInstanceState.getParcelableArrayList("phoneContactsList");
-            for(PhoneContact phoneContact : phoneContactsList){
-                ArrayList<String> a =new ArrayList<>();
-                a.add(phoneContact.name);
-                a.add(phoneContact.phone);
-                result.add(a);
-            }
-        }
+        // To retain the contact list when the fragments are swiped or device is rotated
+        result = ((BaseActivity)getActivity()).getSavedContacts();
+        phoneContactsList = ((BaseActivity)getActivity()).getSavedPhoneContacts();
+        if (result == null || result.size() == 0)
+            new CreateContactList().execute();
 
-        // To retain the contact list when the fragments are swiped
-        else {
-            result = ((BaseActivity)getActivity()).getSavedContacts();
-            phoneContactsList = ((BaseActivity)getActivity()).getSavedPhoneContacts();
-            if (result == null || result.size() == 0)
-                new CreateContactList().execute();
-        }
 
         // set the message for progress bar
         mProgress.setMessage("Displaying Contacts...");
@@ -305,12 +293,14 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         }
         phones.close();
 */
-
+/*
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("phoneContactsList", phoneContactsList);
     }
+    */
+
 /*
     public void addToList() {
         // Log.e("pulkit","pulkit");
@@ -478,7 +468,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         @Override
         protected void onPostExecute(List<ArrayList> output) {
             super.onPostExecute(output);
-            mProgress.hide();
+            mProgress.dismiss();
             recList.setAdapter(alphaAdapter);
             onContactsLoaded.saveContacts(output, phoneContactsList);
         }
