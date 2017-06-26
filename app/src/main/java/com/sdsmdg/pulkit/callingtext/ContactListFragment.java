@@ -73,6 +73,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -86,33 +87,20 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null){
-            phoneContactsList = savedInstanceState.getParcelableArrayList("phoneContactsList");
-            for(PhoneContact phoneContact : phoneContactsList){
-                ArrayList<String> a =new ArrayList<>();
-                a.add(phoneContact.name);
-                a.add(phoneContact.phone);
-                result.add(a);
-                recList.setAdapter(alphaAdapter);
-            }
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.activity_contact_list, container, false);
+
+        // init views
         button1 = (ImageButton) view.findViewById(R.id.imageButton21);
         recList = (RecyclerView) view.findViewById(R.id.questionList_recycler);
         dimLayout = (FrameLayout) view.findViewById(R.id.dim_layout);
         searchLayout = (LinearLayout) view.findViewById(R.id.searchbar);
         backButton = (ImageView) view.findViewById(R.id.backbutton);
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchbox);
-
         result = new ArrayList<>();
 
+        // To retain the contact list when the device is rotated
         if (savedInstanceState != null){
             phoneContactsList = savedInstanceState.getParcelableArrayList("phoneContactsList");
             for(PhoneContact phoneContact : phoneContactsList){
@@ -122,16 +110,20 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 result.add(a);
             }
         }
+
+        // To retain the contact list when the fragments are swiped
         else {
             result = ((BaseActivity)getActivity()).getSavedContacts();
             phoneContactsList = ((BaseActivity)getActivity()).getSavedPhoneContacts();
             if (result == null || result.size() == 0)
                 new CreateContactList().execute();
         }
+
+        // set the message for progress bar
         mProgress.setMessage("Displaying Contacts...");
+
         // Back button to request the focus back to the ContactsListFragment
         backButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 dimLayout.setVisibility(View.GONE);
@@ -145,7 +137,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
         // Dim layout which is present during search operattions
         dimLayout.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
                 dimLayout.setVisibility(View.GONE);
@@ -168,26 +159,21 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 
-      /*  et1.addTextChangedListener(new TextWatcher() {
+      /*
+      et1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(et1.getText().toString().equals(""))
@@ -204,10 +190,13 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             public void afterTextChanged(Editable s) {
 
             }
-        });*/
-      /*  VerticalRecyclerViewFastScroller fastScroller = (VerticalRecyclerViewFastScroller)view.findViewById(R.id.fast_scroller);
+        });
+        */
+        /*
+        VerticalRecyclerViewFastScroller fastScroller = (VerticalRecyclerViewFastScroller)view.findViewById(R.id.fast_scroller);
         fastScroller.setRecyclerView(recList);
-        recList.setOnScrollListener(fastScroller.getOnScrollListener());*/
+        recList.setOnScrollListener(fastScroller.getOnScrollListener());
+        */
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getBaseContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -224,10 +213,9 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 startActivity(i);
                 Log.e("OnClick", "finisherererer");
                 getActivity().finish();
-
-
             }
         });
+
         // Setting the attributes of the search box
         searchBox.setThreshold(1);
         searchBox.setDropDownAnchor(R.id.searchbar);
@@ -238,8 +226,8 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         alphaAdapter.setInterpolator(new OvershootInterpolator());
         alphaAdapter.setDuration(1000);
         alphaAdapter.setFirstOnly(false);
-        recList.setAdapter(alphaAdapter);
-        alphaAdapter.notifyDataSetChanged();
+        if (result.size() != 0)
+            recList.setAdapter(alphaAdapter);
 
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) view.findViewById(R.id.main_swipe);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
@@ -323,7 +311,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("phoneContactsList", phoneContactsList);
     }
-
+/*
     public void addToList() {
         // Log.e("pulkit","pulkit");
         recList.setHasFixedSize(true);
@@ -348,7 +336,8 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         alphaAdapter.setFirstOnly(false);
         recList.setAdapter(ca);
     }
-
+    */
+/*
     public void searchTtem(String s) {
         for (int i = 0; i < result.size(); i++) {
             if (!((result.get(i)).get(0)).toString().contains(s)) {
@@ -371,7 +360,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         recList.setAdapter(ca);
 
     }
-
+*/
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -426,23 +415,16 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
             if (cur.getCount() > 0) {
                 String prev_name = "";            // To keep account of the duplicate names
-
                 String prev_number = "";          // To keep account of the duplicate numbers
-
                 while (cur.moveToNext()) {
-
                     String id = cur.getString(
                             cur.getColumnIndex(ContactsContract.Contacts._ID));
-
                     String name = cur.getString(
                             cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-
                     if(name != null){
-
                         ArrayList<String> a = new ArrayList<String>();
                         int i = 0;
                         a.add(name);
-
                         if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                             //Query phone here.  Covered next
                             Cursor pCur = cr.query(
@@ -450,11 +432,9 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                                     null,
                                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                                     new String[]{id}, null);
-
                             while (pCur.moveToNext()) {
                                 // Do something with phones
                                 String phone = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
                                 if (phone != null) {
                                     if (!name.equals(prev_name) || !phone.equals(prev_number)) {
                                         if (i == 0) {
@@ -484,7 +464,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             cur.close();
 
             // Removing duplicate contacts by simple comparison
-
             int z;
             for(z = 0; z < result.size()-1; z++){
                 if(result.get(z) == result.get(z+1)){
@@ -500,7 +479,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         protected void onPostExecute(List<ArrayList> output) {
             super.onPostExecute(output);
             mProgress.hide();
-            alphaAdapter.notifyDataSetChanged();
+            recList.setAdapter(alphaAdapter);
             onContactsLoaded.saveContacts(output, phoneContactsList);
         }
     }
