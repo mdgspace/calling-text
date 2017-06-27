@@ -147,25 +147,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(true);
     }
 
-    private String searchCallerStatus(final String callerNumber) {
-
-        final String[] callerStatus = new String[1];
-        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("users_status");
-        DatabaseReference usersStatusReference = dr.child(callerNumber);
-        usersStatusReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                callerStatus[0] = dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
-            }
-        });
-        return callerStatus[0];
-    }
-
     public void setImage(String gifNumber) {
         fl.setAlpha(0);
         gifNumber1 = gifNumber;
