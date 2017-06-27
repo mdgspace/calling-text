@@ -11,30 +11,17 @@
     android:transitionName="qwerty2">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:textSize="20dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/textView6"
-        android:layout_marginLeft="78dp"
-        android:layout_marginStart="78dp"
-        android:layout_alignBottom="@+id/imageButton21"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <ImageButton
-        android:layout_width="40dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="30dp"
         android:layout_height="30dp"
-        android:id="@+id/imageButton21"
-        android:src="@drawable/call"
-        android:background="#ffffff"
-        android:layout_marginRight="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:id="@+id/imageView4"
+        android:src="@drawable/con1"
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -43,19 +30,30 @@
         android:text="Small Text"
         android:id="@+id/textView7"
         android:textSize="15dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/textView6"
+        android:layout_below="@+id/textView6"
         android:layout_alignStart="@+id/textView6" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/imageView4"
-        android:src="@drawable/con1"
-        android:layout_marginLeft="14dp"
-        android:layout_marginStart="14dp"
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/imageButton21"
+        android:src="@drawable/call3"
+        android:background="#ffffff"
+        android:layout_marginRight="25dp"
+        android:layout_marginEnd="28dp"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:textSize="17dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/textView6"
+        android:layout_marginLeft="66dp"
+        android:layout_alignTop="@+id/imageButton21"
+        android:layout_toEndOf="@+id/imageView4"
+        android:layout_marginStart="16dp" />
 
 </RelativeLayout>

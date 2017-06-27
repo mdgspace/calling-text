@@ -15,12 +15,17 @@ import android.Manifest;
 public class Splashactivity extends AppCompatActivity {
 
     int PERMISSIONS_REQUEST_CODE = 1;
+    SessionManager session;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashactivity);
+        //session class instance
+        session = new SessionManager(getApplicationContext());
+
 
         Log.e("Splash","INININ");
         if (Build.VERSION.SDK_INT >= 23) {
@@ -32,9 +37,17 @@ public class Splashactivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             // your code here
-                            Intent i = new Intent(Splashactivity.this, BaseActivity.class);
-                            startActivity(i);
-                            finish();
+                           if(session.isLoggedIn()){
+                               Intent i = new Intent(Splashactivity.this, BaseActivity.class);
+
+                               startActivity(i);
+                               finish();
+                           }
+                           else{
+                               Intent loginActivityIntent = new Intent(Splashactivity.this, LoginActivity.class);
+                               startActivity(loginActivityIntent);
+                               finish();
+                           }
                         }
                     },
                     1000
@@ -68,9 +81,17 @@ public class Splashactivity extends AppCompatActivity {
     }
 
     public void startHomeActivity() {
-        Intent i = new Intent(Splashactivity.this, BaseActivity.class);
-        startActivity(i);
-        finish();
+        if(session.isLoggedIn()){
+            Intent i = new Intent(Splashactivity.this, BaseActivity.class);
+
+            startActivity(i);
+            finish();
+        }
+        else{
+            Intent loginActivityIntent = new Intent(Splashactivity.this, LoginActivity.class);
+            startActivity(loginActivityIntent);
+            finish();
+        }
     }
 
     public void requestPermissions() {

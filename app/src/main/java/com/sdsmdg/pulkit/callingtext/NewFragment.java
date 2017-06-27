@@ -27,12 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.Date;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -67,7 +61,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         editText1 = (EditText) view.findViewById(R.id.editText2); //number
         editText2 = (EditText) view.findViewById(R.id.editText);//message
 //        editName = (EditText) view.findViewById(R.id.editText3); //name
-        yourNumber = "7253046197";
+        yourNumber = "7248187747";
         t1 = (TextView) view.findViewById(R.id.textView5);
         img = (GifImageView) view.findViewById(R.id.imageView3);
         if (BaseActivity.mnumber != null) {
@@ -101,7 +95,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                         BaseActivity.calledByapp = true;
                         callIntent.setData(Uri.parse("tel:" + editText1.getText().toString()));
                         Log.e("receiver", "tel:" + editText1.getText().toString());
-                        /*
                         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(BackGroundWorker.value));
                         Cursor phones = getActivity().getContentResolver().query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
                         while (phones.moveToNext()) {
@@ -110,33 +103,8 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                         CallerDetails cd = new CallerDetails(name,editText1.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()));
                         DataBaseHandler dbh=DataBaseHandler.getInstance(getContext());
                         dbh.addCaller(cd);
-*/
-                        // Find the current status of the user being called
-                        String callerStatus = searchCallerStatus(editText1.getText().toString());
-
-                        // Show a dialog to the user to ask him if he wants to make the call
-                        if(callerStatus != null) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                            builder.setMessage(callerStatus).setTitle("Receiver's Present Status")
-                                    .setPositiveButton("CALL", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            startActivity(callIntent);
-                                        }
-                                    }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.dismiss();
-                                }
-                            });
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }
-                        else {
-                            startActivity(callIntent);
-                        }
-
-                    } else {
+                        startActivity(callIntent);
+                    }else {
                         Log.e("in else", "in else");
                         Toast.makeText(getActivity(), "please type your message or number", Toast.LENGTH_SHORT).show();
                     }
@@ -179,96 +147,11 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(true);
     }
 
-    private String searchCallerStatus(final String callerNumber) {
-
-        final String[] callerStatus = new String[1];
-        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("users_status");
-        DatabaseReference usersStatusReference = dr.child(callerNumber);
-        usersStatusReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                callerStatus[0] = dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
-            }
-        });
-        return callerStatus[0];
-    }
-
     public void setImage(String gifNumber) {
         fl.setAlpha(0);
-        Log.e("pul", "pul");
         gifNumber1 = gifNumber;
-
+        img.setImageResource(BaseActivity.imageIds.get(gifNumber));
         call.setVisibility(View.VISIBLE);
-        switch (gifNumber) {
-            case "1":
-                Log.e("in 1", "in 1");
-                img.setImageResource(R.drawable.birthday);
-                break;
-            case "2":
-                img.setImageResource(R.drawable.confused);
-                break;
-            case "3":
-                img.setImageResource(R.drawable.funny);
-                break;
-            case "4":
-                img.setImageResource(R.drawable.embares);
-                break;
-            case "5":
-                img.setImageResource(R.drawable.angry);
-                break;
-            case "6":
-                img.setImageResource(R.drawable.machau);
-                break;
-            case "7":
-                img.setImageResource(R.drawable.sorry);
-                break;
-            case "8":
-                img.setImageResource(R.drawable.hii);
-                break;
-            case "9":
-                img.setImageResource(R.drawable.hello);
-                break;
-            case "10":
-                img.setImageResource(R.drawable.love);
-                break;
-            case "11":
-                img.setImageResource(R.drawable.compliment);
-                break;
-            case "12":
-                img.setImageResource(R.drawable.happy);
-                break;
-            case "13":
-                img.setImageResource(R.drawable.sad);
-                break;
-            case "14":
-                img.setImageResource(R.drawable.crying);
-                break;
-            case "15":
-                img.setImageResource(R.drawable.worried);
-                break;
-            case "16":
-                img.setImageResource(R.drawable.praying);
-                break;
-            case "17":
-                img.setImageResource(R.drawable.smoking);
-                break;
-            case "18":
-                img.setImageResource(R.drawable.birthday);
-                break;
-            case "19":
-                img.setImageResource(R.drawable.birthday);
-                break;
-            case "20":
-                img.setImageResource(R.drawable.envy);
-                break;
-            default:
-                img.setImageResource(R.drawable.birthday);
-        }
     }
 
     private boolean haveNetworkConnection() {

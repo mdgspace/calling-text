@@ -164,12 +164,9 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et1.getText().toString().equals(""))
-                {
+                if (et1.getText().toString().equals("")) {
                     addToList();
-                }
-                else
-                {
+                } else {
                     searchTtem(et1.getText().toString());
                 }
             }
@@ -180,8 +177,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
         });
         */
-        /*
-        VerticalRecyclerViewFastScroller fastScroller = (VerticalRecyclerViewFastScroller)view.findViewById(R.id.fast_scroller);
+      /*  VerticalRecyclerViewFastScroller fastScroller = (VerticalRecyclerViewFastScroller)view.findViewById(R.id.fast_scroller);
         fastScroller.setRecyclerView(recList);
         recList.setOnScrollListener(fastScroller.getOnScrollListener());
         */
@@ -277,33 +273,27 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-
-     // Previous Code
-/*
-        ArrayList<String> a = new ArrayList<String>();
-        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+    
+  // Previous Code
+  /*
+    private List<ArrayList> createList() {
+        result = new ArrayList<>();
+        ArrayList<String> a = new ArrayList<>();
+        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while (phones.moveToNext()) {
             String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
             a.add(name);
             a.add(phoneNumber);
             result.add(a);
-            a = new ArrayList<String>();
+            a = new ArrayList<>();
 
         }
         phones.close();
-*/
-/*
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("phoneContactsList", phoneContactsList);
+        return result;
     }
-    */
-
-/*
+*/
     public void addToList() {
-        // Log.e("pulkit","pulkit");
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -326,15 +316,20 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         alphaAdapter.setFirstOnly(false);
         recList.setAdapter(ca);
     }
-    */
-/*
+    
     public void searchTtem(String s) {
+        ArrayList<ArrayList> contactList = new ArrayList<>();
+        ArrayList<String> contact = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
-            if (!((result.get(i)).get(0)).toString().contains(s)) {
-                result.remove(i);
+            if (result.get(i).get(0).toString().startsWith(s)) {
+                contact.add(result.get(i).get(0).toString());
+                contact.add(result.get(i).get(1).toString());
+                contactList.add(contact);
+                contact = new ArrayList<>();
             }
         }
-        ContactListAdapter ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
+        Log.e("result", contactList + "");
+        ContactListAdapter ca = new ContactListAdapter(contactList, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
                 Log.i("OnClick", "inside the onclick of the adapter");
@@ -350,7 +345,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         recList.setAdapter(ca);
 
     }
-*/
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
