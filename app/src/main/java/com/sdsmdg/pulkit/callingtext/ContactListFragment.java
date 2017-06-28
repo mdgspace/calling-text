@@ -101,11 +101,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         result = new ArrayList<>();
 
         // To retain the contact list when the fragments are swiped or device is rotated
+        result = new ArrayList<>();
         result = ((BaseActivity)getActivity()).getSavedContacts();
         phoneContactsList = ((BaseActivity)getActivity()).getSavedPhoneContacts();
         if (result == null || result.size() == 0)
             new CreateContactList().execute();
-
 
         // set the message for progress bar
         mProgress.setMessage("Displaying Contacts...");
@@ -187,31 +187,15 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         recList.setLayoutManager(llm);
         Log.e("p", result + "");
 
-        ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick() {
-                Log.i("OnClick", "inside the onclick of the adapter");
-                Intent i = new Intent(getContext(), BaseActivity.class);
-                i.putExtra("pagenumber", "2");
-                Log.e("OnClick", "internt set !! ");
-                startActivity(i);
-                Log.e("OnClick", "finisherererer");
-                getActivity().finish();
-            }
-        });
-
         // Setting the attributes of the search box
         searchBox.setThreshold(1);
         searchBox.setDropDownAnchor(R.id.searchbar);
         adapter = new PhoneSearchSuggestionAdapter(getContext(), R.layout.search_suggestion_item, phoneContactsList);
         searchBox.setAdapter(adapter);
 
-        alphaAdapter = new ScaleInAnimationAdapter(ca);
-        alphaAdapter.setInterpolator(new OvershootInterpolator());
-        alphaAdapter.setDuration(1000);
-        alphaAdapter.setFirstOnly(false);
-        if (result.size() != 0)
-            recList.setAdapter(alphaAdapter);
+        if (result != null && result.size() != 0) {
+            setContactListAdapter();
+        }
 
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) view.findViewById(R.id.main_swipe);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
@@ -375,6 +359,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
     private class CreateContactList extends AsyncTask<Void, Void, List<ArrayList>>{
 
+        List<ArrayList> contactsList = new ArrayList<>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -383,13 +368,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
         @Override
         protected List<ArrayList> doInBackground(Void... params) {
-            result = createList();
-            return result;
+            contactsList = createList();
+            return contactsList;
         }
 
         private List<ArrayList> createList() {
-            result = new ArrayList<ArrayList>();
-
             phoneContactsList = new ArrayList<PhoneContact>();
             PhoneContact phoneContact ;
             // Code for contacts retrieval
@@ -424,14 +407,14 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                                     if (!name.equals(prev_name) || !phone.equals(prev_number)) {
                                         if (i == 0) {
                                             a.add(phone);
-                                            result.add(a);
+                                            contactsList.add(a);
                                             phoneContact = new PhoneContact(name, phone);
                                             phoneContactsList.add(phoneContact);
                                             i = 1;
                                         } else {
                                             if (!(prev_number.equals(phone))) {
                                                 a.set(1, phone);
-                                                result.add(a);
+                                                contactsList.add(a);
                                                 phoneContact = new PhoneContact(name, phone);
                                                 phoneContactsList.add(phoneContact);
                                             }
@@ -450,21 +433,22 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
             // Removing duplicate contacts by simple comparison
             int z;
-            for(z = 0; z < result.size()-1; z++){
-                if(result.get(z) == result.get(z+1)){
-                    result.remove(z);
+            for(z = 0; z < contactsList.size()-1; z++){
+                if(contactsList.get(z) == contactsList.get(z+1)){
+                    contactsList.remove(z);
                 }
             }
 
-            int size = result.size();   // To check the size of the results
-            return result;
+            int size = contactsList.size();   // To check the size of the contactsLists
+            return contactsList;
         }
 
         @Override
         protected void onPostExecute(List<ArrayList> output) {
             super.onPostExecute(output);
             mProgress.dismiss();
-            recList.setAdapter(alphaAdapter);
+            result = output;
+            setContactListAdapter();
             onContactsLoaded.saveContacts(output, phoneContactsList);
         }
     }
@@ -473,5 +457,25 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         public void saveContacts(List<ArrayList> contactsList, ArrayList<PhoneContact> phoneContacts);
     }
 
+    public void setContactListAdapter(){
 
+        ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick() {
+                Log.i("OnClick", "inside the onclick of the adapter");
+                Intent i = new Intent(getContext(), BaseActivity.class);
+                i.putExtra("pagenumber", "2");
+                Log.e("OnClick", "internt set !! ");
+                startActivity(i);
+                Log.e("OnClick", "finisherererer");
+                getActivity().finish();
+            }
+        });
+
+        alphaAdapter = new ScaleInAnimationAdapter(ca);
+        alphaAdapter.setInterpolator(new OvershootInterpolator());
+        alphaAdapter.setDuration(1000);
+        alphaAdapter.setFirstOnly(false);
+        recList.setAdapter(alphaAdapter);
+    }
 }
