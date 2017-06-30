@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -34,8 +33,8 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
 
     public RecyclerView recList;
-    Button button;
     public ImageButton button1;
+    Button button;
     EditText et1;
     List<ArrayList> result;
     View view;
@@ -114,26 +113,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         return view;
     }
 
-    private class Task extends AsyncTask<Void, Void, String[]> {
-
-        @Override
-        protected String[] doInBackground(Void... params) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return new String[0];
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            // Call setRefreshing(false) when the list has been refreshed.
-            mWaveSwipeRefreshLayout.setRefreshing(false);
-            super.onPostExecute(result);
-        }
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri CONTENT_URI = ContactsContract.RawContacts.CONTENT_URI;
@@ -158,7 +137,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-
 
     private List<ArrayList> createList() {
         result = new ArrayList<>();
@@ -213,19 +191,37 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
         }
         Log.e("result", contactList + "");
-        ContactListAdapter ca = new ContactListAdapter(contactList, getActivity(), new ContactListAdapter.OnItemClickListener() {
+        ContactListAdapter contactListAdapter = new ContactListAdapter(contactList, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
                 Log.i("OnClick", "inside the onclick of the adapter");
-                Intent i = new Intent(getContext(), BaseActivity.class);
-                i.putExtra("pagenumber", "2");
-                Log.e("OnClick", "internt set !! ");
-                startActivity(i);
-                Log.e("OnClick", "finisherererer");
+                Intent intent = new Intent(getContext(), BaseActivity.class);
+                intent.putExtra("pagenumber", "2");
+                startActivity(intent);
                 getActivity().finish();
 
             }
         });
-        recList.setAdapter(ca);
+        recList.setAdapter(contactListAdapter);
+    }
+
+    private class Task extends AsyncTask<Void, Void, String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return new String[0];
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            // Call setRefreshing(false) when the list has been refreshed.
+            mWaveSwipeRefreshLayout.setRefreshing(false);
+            super.onPostExecute(result);
+        }
     }
 }

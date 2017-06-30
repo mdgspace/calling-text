@@ -44,6 +44,10 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
         yourNumber = "7248187747";
     }
 
+    /**
+     * sets images to the gif views
+     * @param gifNumber The number of the gif
+     */
     public void setImage(String gifNumber) {
         Log.e("aj", "aj");
         gifNumber1 = gifNumber;
