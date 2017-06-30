@@ -1,12 +1,7 @@
 package com.sdsmdg.pulkit.callingtext;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.TelephonyManager;
-import android.transition.TransitionManager;
-import android.util.Log;
-import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,18 +47,7 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ListVi
         timeDiff = (Long.valueOf(System.currentTimeMillis())-Long.parseLong(hd.getCall_time()))/1000;
         holder.time.setText(getTime(timeDiff));
         final boolean isExpanded = position==mExpandedPosition;
-       /* holder.vMsg.setVisibility(isExpanded?View.VISIBLE:View.GONE);
-        holder.itemView.setActivated(isExpanded);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("on click","on click");
-                mExpandedPosition = isExpanded ? -1:position;
-                TransitionManager.beginDelayedTransition(recyclerView);
-                holder.vMsg.setVisibility(View.VISIBLE);
-                notifyDataSetChanged();
-            }
-        });*/
+
         if (hd.getCall_type().equals("outgoing")) {
             holder.type.setImageResource(R.drawable.call_made);
         } else if (hd.getCall_type().equals("incoming")) {
