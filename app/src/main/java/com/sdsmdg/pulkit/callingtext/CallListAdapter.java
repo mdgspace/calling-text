@@ -46,7 +46,7 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ListVi
 
     @Override
     public void onBindViewHolder(final CallListAdapter.ListViewHolder holder, final int position) {
-        CallerDetails hd = callerList.get(position);
+        final CallerDetails hd = callerList.get(position);
         holder.vNumber.setText(hd.getCaller_number());
         holder.vMsg.setText(hd.getCaller_msg());
         timeDiff = (Long.valueOf(System.currentTimeMillis())-Long.parseLong(hd.getCall_time()))/1000;
@@ -64,6 +64,14 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ListVi
                 notifyDataSetChanged();
             }
         });*/
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent callDetails=new Intent(parentAct, RecentCalls.class);
+              callDetails.putExtra("Number",hd.getCaller_number());
+              parentAct.startActivity(callDetails);
+          }
+      });
         if (hd.getCall_type().equals("outgoing")) {
             holder.type.setImageResource(R.drawable.call_made);
         } else if (hd.getCall_type().equals("incoming")) {
