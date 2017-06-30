@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class BackGroundWorker extends AsyncTask<String, Void, String> {
     String number;
     String type;
     String time;
+    String duration;
     public static String value = "";
     public static String gifId;
     public static String msg;
@@ -83,7 +85,8 @@ public class BackGroundWorker extends AsyncTask<String, Void, String> {
                     number = BackGroundWorker.value;
                     type = "incoming";
                     time = String.valueOf(new Date().getTime());
-                    CallerDetails cd =new CallerDetails(name,number,msg,type,time);
+                    duration=String.valueOf(CallLog.Calls.DURATION);
+                    CallerDetails cd =new CallerDetails(name,number,msg,type,time,duration);
                     dbh= DataBaseHandler.getInstance(context);
                     dbh.addCaller(cd);
                     mCallback.getContent(msg + " " + gifId);
@@ -98,8 +101,9 @@ public class BackGroundWorker extends AsyncTask<String, Void, String> {
                     }
                     number = BackGroundWorker.value;
                     type = "incoming";
+                    duration=String.valueOf(CallLog.Calls.DURATION);
                     time = String.valueOf(new Date().getTime());
-                    CallerDetails cd =new CallerDetails(name,number,msg,type,time);
+                    CallerDetails cd =new CallerDetails(name,number,msg,type,time,duration);
                     dbh= DataBaseHandler.getInstance(context);
                     dbh.addCaller(cd);
 

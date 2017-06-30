@@ -25,7 +25,7 @@ public class DataBaseHandler extends SQLiteOpenHelper{
     private static final String CALL_TIME = "time";
     private static final String CALL_TYPE= "type";
     private static final String MESSAGE="message";
-
+    private static final String CALL_DURATION="duration";
     private static final String TABLE_login= "login";
     private static final String NAME= "name";
     private static final String PASSWORD = "password";
@@ -43,7 +43,7 @@ public class DataBaseHandler extends SQLiteOpenHelper{
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String create_table_users = "CREATE TABLE " + TABLE_CALLERS + "(" + CALLER_NAME + " TEXT,"+CALLER_NUMBER +" TEXT," + CALL_TIME + " TEXT," + MESSAGE+" TEXT,"+ CALL_TYPE + " TEXT)";
+        String create_table_users = "CREATE TABLE " + TABLE_CALLERS + "(" + CALLER_NAME + " TEXT,"+CALLER_NUMBER +" TEXT," + CALL_TIME + " TEXT," + MESSAGE+" TEXT,"+ CALL_TYPE + " TEXT,"+ CALL_DURATION + " TEXT)";
         db.execSQL(create_table_users);
         String create_table_login = "CREATE TABLE " + TABLE_login + "(" + NAME + " TEXT,"+ PASSWORD + " TEXT)";
         db.execSQL(create_table_login);
@@ -72,6 +72,7 @@ public class DataBaseHandler extends SQLiteOpenHelper{
         values.put(CALL_TIME,cd.call_time);
         values.put(MESSAGE,cd.caller_msg);
         values.put(CALL_TYPE,cd.call_type);
+        values.put(CALL_DURATION,cd.call_duration);
         db.insert(TABLE_CALLERS, null, values);
         db.close();
     }
@@ -93,7 +94,7 @@ public class DataBaseHandler extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
-                CallerDetails cd = new CallerDetails(cursor.getString(0), cursor.getString(1), cursor.getString(3), cursor.getString(4),cursor.getString(2));
+                CallerDetails cd = new CallerDetails(cursor.getString(0), cursor.getString(1), cursor.getString(3), cursor.getString(4),cursor.getString(2),cursor.getString(5));
                 userList.add(cd);
             } while (cursor.moveToNext());
         }
@@ -106,5 +107,25 @@ public class DataBaseHandler extends SQLiteOpenHelper{
         if (cursor != null)
             cursor.moveToFirst();
         return cursor.getString(1);
+    }
+
+    public List<CallerDetails> getAllCallsByNumber(String[] number){
+        List<CallerDetails> userList = new ArrayList<>();
+        String query = "SELECT * FROM " + TABLE_CALLERS+ " WHERE "+ CALLER_NUMBER+ "=?";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, number); if (cursor.moveToFirst()) {
+            do {
+                CallerDetails cd = new CallerDetails(cursor.getString(0), cursor.getString(1), cursor.getString(3), cursor.getString(4),cursor.getString(2),cursor.getString(5));
+                userList.add(cd);
+            } while (cursor.moveToNext());
+        }
+        Collections.reverse(userList);
+        return userList;
+    }
+    public String getName(String[] number){
+        String query = "SELECT * FROM " + TABLE_CALLERS+ " WHERE "+ CALLER_NUMBER+ "=?";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, number);
+        return cursor.getString(0);
     }
 }
