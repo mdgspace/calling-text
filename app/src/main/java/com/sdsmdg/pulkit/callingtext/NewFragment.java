@@ -58,9 +58,9 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         yourNumber = "7248187747";
         t1 = (TextView) view.findViewById(R.id.textView5);
         img = (GifImageView) view.findViewById(R.id.imageView3);
-        if (BaseActivity.mnumber != null) {
-            Log.i("Number selected ", BaseActivity.mnumber);
-            editText1.setText(BaseActivity.mnumber);
+        if (BaseActivity.mNumber != null) {
+            Log.i("Number selected ", BaseActivity.mNumber);
+            editText1.setText(BaseActivity.mNumber);
         }
 
         fl = (FrameLayout) view.findViewById(R.id.color);
@@ -209,7 +209,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.i("NewFragment", "Attached");
-//        editName.setText(BaseActivity.getMname());
+//        editName.setText(BaseActivity.getmName());
 
 
     }

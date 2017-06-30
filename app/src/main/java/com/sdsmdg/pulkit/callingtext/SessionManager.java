@@ -19,7 +19,7 @@ public class SessionManager {
     private static final String IS_LOGIN = "IsLoggedIn";
     // User name (make variable public to access from outside)
     private static final String KEY_NAME = "name";
-    // Email address (make variable public to access from outside)
+    // Phone Number (make variable public to access from outside)
     private static final String KEY_NUMBER = "number";
     //SharedPreferences
     private SharedPreferences preferences;
@@ -79,16 +79,16 @@ public class SessionManager {
     public void checkLogIn() {
         // Check login status
         if (!this.isLoggedIn()) {
-            // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(context, LoginActivity.class);
+            // user is not logged intent redirect him to Login Activity
+            Intent intent = new Intent(context, LoginActivity.class);
             // Closing all the Activities
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             // Add new Flag to start new Activity
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             // Staring Login Activity
-            context.startActivity(i);
+            context.startActivity(intent);
 
             //finish current activity
             ((Activity) context).finish();

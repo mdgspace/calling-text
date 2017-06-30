@@ -24,7 +24,7 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     Button btn_settings;
-    public static String mname, mnumber;
+    public static String mName, mNumber;
     public static Boolean calledByapp = false;
     private TabLayout tabLayout;
     public static HashMap<String,Integer> imageIds;
@@ -152,20 +152,20 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
 
-    public static String getMname() {
-        return mname;
+    public static String getmName() {
+        return mName;
     }
 
-    public static void setMname(String mname) {
-        BaseActivity.mname = mname;
+    public static void setmName(String mName) {
+        BaseActivity.mName = mName;
     }
 
-    public static String getMnumber() {
-        return mnumber;
+    public static String getmNumber() {
+        return mNumber;
     }
 
-    public static void setMnumber(String mnumber) {
-        BaseActivity.mnumber = mnumber;
+    public static void setmNumber(String mNumber) {
+        BaseActivity.mNumber = mNumber;
     }
 
 }

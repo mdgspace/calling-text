@@ -20,12 +20,12 @@ import pl.droidsonroids.gif.GifImageView;
 public class PopupDialer extends AppCompatActivity implements GifFragment.onImageselectionListener {
 
     public static String gifNumber1 = "1";
-    public String TAG = "POPUP";
-    EditText et_message;
+    public static final String TAG = "POPUP";
+    EditText ediTextMessage;
     GifImageView gifImageView;
     GifFragment fragment;
     Button call;
-    RelativeLayout rl;
+    RelativeLayout mRelativeLayout;
     String number, message, yourNumber;
 
     @Override
@@ -148,8 +148,8 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
      * This method initialises various variables
      */
     private void initVariables() {
-        rl = (RelativeLayout) findViewById(R.id.popup_rl);
-        et_message = (EditText) findViewById(R.id.message);
+        mRelativeLayout = (RelativeLayout) findViewById(R.id.popup_rl);
+        ediTextMessage = (EditText) findViewById(R.id.message);
         call = (Button) findViewById(R.id.btn_call);
         gifImageView = (GifImageView) findViewById(R.id.gif_image);
         number = getIntent().getExtras().getString("number");
@@ -177,7 +177,7 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
                     }
                     //to disable
                     getBaseContext().getPackageManager().setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                    message = et_message.getText().toString();
+                    message = ediTextMessage.getText().toString();
                     if (message.isEmpty() && number != null) {
                         BackGroundWorker b = new BackGroundWorker(PopupDialer.this, 2);
                         b.execute(yourNumber, number, message, gifNumber1);
