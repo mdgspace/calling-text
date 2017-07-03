@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -22,15 +23,18 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
+
 public class FavouriteFragment extends Fragment{
     private RecyclerView mRecyclerView;
     private FavouriteAdapter mAdapter;
     private View view;
-    private List<ArrayList> result, favList;
+    private List<ArrayList>  favList;
     private FloatingActionButton mFavFab;
-    private DataBaseHandler dataBaseHandler;
     private EditText editText;
-    private String numberAddFav;
+    private String nameAddFav;
+    private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
+
     @Nullable
 
     @Override
@@ -38,19 +42,23 @@ public class FavouriteFragment extends Fragment{
 
         view=inflater.inflate(R.layout.fragment_favourites,container,false);
         mFavFab=(FloatingActionButton) view.findViewById(R.id.favoriteFab);
-        editText = (EditText)view.findViewById(R.id.favAddNumber);
+        editText = (EditText)view.findViewById(R.id.favAddName);
+        mWaveSwipeRefreshLayout= (WaveSwipeRefreshLayout) view.findViewById(R.id.main_swipe);
         mFavFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if(editText.getVisibility() == View.VISIBLE)
                 {
-                    numberAddFav=editText.getText().toString();
+                    /* Shows the editText if its not already visible so that the user may add any contact to favourite contact*/
+
+                    /* This has to be further enhanced by the implementation of search or predictive hints as the user types the name*/
+                    nameAddFav=editText.getText().toString();
                     mFavFab.setImageResource(R.drawable.ic_plus);
                     editText.setVisibility(View.INVISIBLE);
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(ContactsContract.Contacts.STARRED,1);
-                    getContext().getContentResolver().update(ContactsContract.Contacts.CONTENT_URI, contentValues, ContactsContract.Contacts.Data.DATA1+"=?", new String[]{numberAddFav+""});
+                    getContext().getContentResolver().update(ContactsContract.Contacts.CONTENT_URI, contentValues, ContactsContract.Contacts.DISPLAY_NAME+"=?", new String[]{nameAddFav});
 
                 }
                 else {
@@ -62,30 +70,41 @@ public class FavouriteFragment extends Fragment{
             }
         });
 
-        dataBaseHandler=DataBaseHandler.getInstance(getContext());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.favRecyclerView);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        mAdapter = new FavouriteAdapter(getContext(), createFavouriteList());
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setHasFixedSize(true);
+        addToList();
+
+        /*For refreshing the fragment views*/
+
+        mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                addToList();
+                new FavouriteFragment.Task().execute();
+            }
+        });
                return view;
     }
-    private List<ArrayList> createList() {
-        result = new ArrayList<>();
-        ArrayList<String> a = new ArrayList<>();
-        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (phones.moveToNext()) {
-            String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            a.add(name);
-            a.add(phoneNumber);
-            result.add(a);
-            a = new ArrayList<>();
 
+    private class Task extends AsyncTask<Void, Void, String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }return new String[0];
         }
-        phones.close();
-        return result;
+
+        @Override protected void onPostExecute(String[] result) {
+            // Call setRefreshing(false) when the list has been refreshed.
+            mWaveSwipeRefreshLayout.setRefreshing(false);
+            super.onPostExecute(result);
+        }
     }
+
+    /* This method generates the list of favourite contacts, this list changes with changes in default contact apps*/
 
     public List<ArrayList> createFavouriteList(){
         favList= new ArrayList<>();
@@ -101,6 +120,15 @@ public class FavouriteFragment extends Fragment{
         }
         favPhones.close();
         return favList;
+    }
+
+    /* Method for setting adapter*/
+
+    public void addToList(){
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mAdapter = new FavouriteAdapter(getContext(), createFavouriteList());
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setHasFixedSize(true);
     }
 
 }
