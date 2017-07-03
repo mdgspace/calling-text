@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ListVi
     RecyclerView recyclerView;
     Long timeDiff;
 
-    public CallListAdapter(List<CallerDetails> historyList, Activity activity,RecyclerView recyclerView1) {
+    public CallListAdapter(List<CallerDetails> historyList, Activity activity, RecyclerView recyclerView1) {
         this.callerList = historyList;
         this.recyclerView=recyclerView1;
         parentAct = activity;
@@ -41,16 +42,16 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ListVi
 
     @Override
     public void onBindViewHolder(final CallListAdapter.ListViewHolder holder, final int position) {
-        CallerDetails hd = callerList.get(position);
-        holder.vNumber.setText(hd.getCaller_number());
-        holder.vMsg.setText(hd.getCaller_msg());
-        timeDiff = (Long.valueOf(System.currentTimeMillis())-Long.parseLong(hd.getCall_time()))/1000;
+        CallerDetails callerDetails = callerList.get(position);
+        holder.vNumber.setText((CharSequence) callerDetails.getCaller_number());
+        holder.vMsg.setText((CharSequence) callerDetails.getCaller_msg());
+        timeDiff = (Long.valueOf(System.currentTimeMillis())-Long.parseLong((String) callerDetails.getCall_time()))/1000;
         holder.time.setText(getTime(timeDiff));
         final boolean isExpanded = position==mExpandedPosition;
 
-        if (hd.getCall_type().equals("outgoing")) {
+        if (callerDetails.getCall_type().equals("outgoing")) {
             holder.type.setImageResource(R.drawable.call_made);
-        } else if (hd.getCall_type().equals("incoming")) {
+        } else if (callerDetails.getCall_type().equals("incoming")) {
             holder.type.setImageResource(R.drawable.call_received);
         }
 

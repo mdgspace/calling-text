@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     card_view:cardCornerRadius="10dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="10dp"
+    card_view:cardBackgroundColor="#424242"
     card_view:cardUseCompatPadding="true">
 <RelativeLayout
     android:layout_width="190dp"
@@ -20,10 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Name"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
+        android:layout_centerHorizontal="true"
         android:id="@+id/nameFav"
         android:layout_marginTop="75dp"
-        android:layout_centerHorizontal="true"
         />
 
 </RelativeLayout>
