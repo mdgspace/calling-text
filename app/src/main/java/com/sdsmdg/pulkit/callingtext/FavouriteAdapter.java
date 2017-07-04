@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amulyakhare.textdrawable.TextDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +45,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Grid
         holder.tvName.setText((CharSequence) mItemList.get(position).get(0));
 
         /*Generates a random color everytime the view is bound to the viewholder, also gives the icon for the first letter of the name*/
+        holder.imageView.setText((CharSequence) mItemList.get(position).get(0).toString().substring(0,1));
 
-        Random rnd = new Random();
-        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        TextDrawable drawable = TextDrawable.builder().buildRound(( mItemList.get(position).get(0)).toString().substring(0,1), color);
-        holder.imageView.setImageDrawable(drawable);
         holder.buttonViewOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,12 +86,12 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Grid
 
         protected TextView tvName, buttonViewOption;
         public FavouriteAdapter favouriteAdapter;
-        public ImageView imageView;
+        public TextView imageView;
         public GridItemViewHolder(View itemView, FavouriteAdapter favouriteAdapter) {
             super(itemView);
             this.favouriteAdapter=favouriteAdapter;
             tvName= (TextView) itemView.findViewById(R.id.nameFav);
-            imageView= (ImageView) itemView.findViewById(R.id.imageFav);
+            imageView= (TextView) itemView.findViewById(R.id.imageFav);
             buttonViewOption = (TextView) itemView.findViewById(R.id.textViewOptions);
             itemView.setOnClickListener(this);
         }

@@ -25,7 +25,7 @@ import java.util.List;
 
 import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 
-public class FavouriteFragment extends Fragment{
+public class    FavouriteFragment extends Fragment{
     private RecyclerView mRecyclerView;
     private FavouriteAdapter mAdapter;
     private View view;
