@@ -82,7 +82,8 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         Log.e("p", createList() + "");
-        ContactListAdapter ca = new ContactListAdapter(createList(), getActivity(), new ContactListAdapter.OnItemClickListener() {
+        ContactListAdapter ca = new ContactListAdapter(createList(), getActivity(),
+                new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
                 Log.i("OnClick", "inside the onclick of the adapter");

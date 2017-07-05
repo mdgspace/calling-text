@@ -6,7 +6,7 @@ package com.sdsmdg.pulkit.callingtext;
 
 public class CallerDetails {
 
-    String caller_name;
+    String caller_name ="anonymous";
     String caller_number;
     String caller_msg;
     String call_type;

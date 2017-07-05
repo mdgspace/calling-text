@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,9 +28,11 @@ public class DataBaseHandler extends SQLiteOpenHelper{
     private static final String NAME= "name";
     private static final String PASSWORD = "password";
     private static DataBaseHandler instance = null;
+    private Context context;
 
      DataBaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context=context;
     }
 
     /**
