@@ -42,10 +42,10 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Grid
 
         mName= (String) mItemList.get(position).get(0);
         mNumber= (String) mItemList.get(position).get(1);
-        holder.tvName.setText((CharSequence) mItemList.get(position).get(0));
+        holder.tvName.setText((String) mItemList.get(position).get(0));
 
         /*Generates a random color everytime the view is bound to the viewholder, also gives the icon for the first letter of the name*/
-        holder.imageView.setText((CharSequence) mItemList.get(position).get(0).toString().substring(0,1));
+        holder.imageView.setText(mItemList.get(position).get(0).toString().substring(0,1));
 
         holder.buttonViewOption.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,9 +61,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Grid
                         switch (item.getItemId()) {
                             /*Removes the contact from favourites list*/
                             case R.id.removeFavCard:
-                                ContentValues contentValues = new ContentValues();
-                                contentValues.put(ContactsContract.Contacts.STARRED,0);
-                                context.getContentResolver().update(ContactsContract.Contacts.CONTENT_URI, contentValues, ContactsContract.Contacts.DISPLAY_NAME+"=?", new String[]{holder.tvName.getText().toString()});
+                                removeFavouriteContact();
                                 break;
                             }
                         return false;
@@ -74,6 +72,12 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Grid
 
             }
         });
+    }
+
+    private void removeFavouriteContact() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ContactsContract.Contacts.STARRED,0);
+        context.getContentResolver().update(ContactsContract.Contacts.CONTENT_URI, contentValues, ContactsContract.Contacts.DISPLAY_NAME+"=?", new String[]{mName});
     }
 
     @Override
