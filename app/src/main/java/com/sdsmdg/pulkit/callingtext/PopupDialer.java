@@ -19,7 +19,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class PopupDialer extends AppCompatActivity implements GifFragment.onImageselectionListener {
 
-    public static String gifNumber1 = "1";
+    public static int gifNumber1 = 1;
     public static final String TAG = "POPUP";
     EditText ediTextMessage;
     GifImageView gifImageView;
@@ -50,74 +50,10 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
      */
     public void setImage(String gifNumber) {
         Log.e("aj", "aj");
-        gifNumber1 = gifNumber;
+        gifNumber1 = Integer.parseInt(gifNumber);
 
         call.setVisibility(View.VISIBLE);
-        switch (gifNumber) {
-            case "1":
-                Log.e("in 1", "in 1");
-                gifImageView.setImageResource(R.drawable.birthday);
-                break;
-            case "2":
-                gifImageView.setImageResource(R.drawable.confused);
-                break;
-            case "3":
-                gifImageView.setImageResource(R.drawable.funny);
-                break;
-            case "4":
-                gifImageView.setImageResource(R.drawable.embares);
-                break;
-            case "5":
-                gifImageView.setImageResource(R.drawable.angry);
-                break;
-            case "6":
-                gifImageView.setImageResource(R.drawable.machau);
-                break;
-            case "7":
-                gifImageView.setImageResource(R.drawable.sorry);
-                break;
-            case "8":
-                gifImageView.setImageResource(R.drawable.hii);
-                break;
-            case "9":
-                gifImageView.setImageResource(R.drawable.hello);
-                break;
-            case "10":
-                gifImageView.setImageResource(R.drawable.love);
-                break;
-            case "11":
-                gifImageView.setImageResource(R.drawable.compliment);
-                break;
-            case "12":
-                gifImageView.setImageResource(R.drawable.happy);
-                break;
-            case "13":
-                gifImageView.setImageResource(R.drawable.sad);
-                break;
-            case "14":
-                gifImageView.setImageResource(R.drawable.crying);
-                break;
-            case "15":
-                gifImageView.setImageResource(R.drawable.worried);
-                break;
-            case "16":
-                gifImageView.setImageResource(R.drawable.praying);
-                break;
-            case "17":
-                gifImageView.setImageResource(R.drawable.smoking);
-                break;
-            case "18":
-                gifImageView.setImageResource(R.drawable.birthday);
-                break;
-            case "19":
-                gifImageView.setImageResource(R.drawable.birthday);
-                break;
-            case "20":
-                gifImageView.setImageResource(R.drawable.envy);
-                break;
-            default:
-                gifImageView.setImageResource(R.drawable.birthday);
-        }
+        gifImageView.setImageResource(BaseActivity.imageIds[gifNumber1-1]);
     }
 
 
@@ -180,7 +116,7 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
                     message = ediTextMessage.getText().toString();
                     if (message.isEmpty() && number != null) {
                         BackGroundWorker b = new BackGroundWorker(PopupDialer.this, 2);
-                        b.execute(yourNumber, number, message, gifNumber1);
+                        b.execute(yourNumber, number, message, String.valueOf(gifNumber1));
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + number));
                         try {

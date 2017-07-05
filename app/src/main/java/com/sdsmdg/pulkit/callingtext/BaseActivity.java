@@ -132,7 +132,7 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
      * This function sets up the image ids.
      */
     private void setImageIds(){
-        imageIds=new int[14];
+        imageIds=new int[19];
         imageIds[0] = R.drawable.birthday;
         imageIds[1] = R.drawable.confused;
         imageIds[2] = R.drawable.funny;
@@ -147,6 +147,11 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
         imageIds[11] = R.drawable.happy;
         imageIds[12] = R.drawable.sad;
         imageIds[13] = R.drawable.crying;
+        imageIds[14] = R.drawable.worried;
+        imageIds[15] = R.drawable.praying;
+        imageIds[16] = R.drawable.smoking;
+        imageIds[17] = R.drawable.birthday;
+        imageIds[18] = R.drawable.envy;
     }
 
 
