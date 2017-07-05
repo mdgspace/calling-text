@@ -103,8 +103,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Grid
 * Handles onClick event of the favourite card*/
         @Override
         public void onClick(View v) {
-            BaseActivity.mname=mName;
-            BaseActivity.mnumber=mNumber;
+            BaseActivity.mName=mName;
+            BaseActivity.mNumber=mNumber;
             Intent i = new Intent(context, BaseActivity.class);
             i.putExtra("pagenumber", "2");
             context.startActivity(i);
