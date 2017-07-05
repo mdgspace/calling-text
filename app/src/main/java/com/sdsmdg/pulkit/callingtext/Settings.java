@@ -27,7 +27,7 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(et_number.getText()!=null){
-                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("NUMBER", et_number.getText().toString()).commit();
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("NUMBER", et_number.getText().toString()).apply();
                     Toast.makeText(getBaseContext(),"NUMBER SAVED",Toast.LENGTH_LONG).show();
 
                 }else {

@@ -20,6 +20,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 return new HistoryFragment();
             case 2:
                 return new NewFragment();
+            case 3:
+                return new FavouriteFragment();
         }
 
         return null;
@@ -33,12 +35,14 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
                 return "History";
             case 2:
                 return "New";
+            case 3:
+                return "Favourite";
         }
         return null;
     }
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
 }
