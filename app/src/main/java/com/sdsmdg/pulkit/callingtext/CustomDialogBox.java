@@ -30,7 +30,7 @@ public class CustomDialogBox extends AppCompatActivity {
        textView = (TextView)findViewById(R.id.textView5);
        gifImageView =(GifImageView)findViewById(R.id.imageView2);
        int id=Integer.parseInt(CallManager.msg.substring(CallManager.msg.lastIndexOf(" ")+1));
-        gifImageView.setImageResource(BaseActivity.imageIds.get(String.valueOf(id)));
+        gifImageView.setImageResource(BaseActivity.imageIds[id]);
       textView.setText((CallManager.msg).substring(0,CallManager.msg.lastIndexOf(" ")));
     }
     public void ok(View v)

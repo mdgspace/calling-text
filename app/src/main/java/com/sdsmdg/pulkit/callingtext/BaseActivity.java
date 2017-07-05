@@ -15,8 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.HashMap;
-
 
 public class BaseActivity extends FragmentActivity implements ActionBar.TabListener, GifFragment.onImageselectionListener {
 
@@ -27,7 +25,7 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
     public static String mName, mNumber;
     public static Boolean calledByapp = false;
     private TabLayout tabLayout;
-    public static HashMap<String,Integer> imageIds;
+    public static int[] imageIds;
     SessionManager session;  //session manager class
     public static String receiver = "7248187747";
 
@@ -98,7 +96,7 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
 
         if (newFragment != null) {
             Log.e("in null", "in null");
-            newFragment.setImage(position);
+            newFragment.setImage(Integer.parseInt(position));
         }
     }
 
@@ -134,21 +132,21 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
      * This function sets up the image ids.
      */
     private void setImageIds(){
-        imageIds=new HashMap<>();
-        imageIds.put("1",R.drawable.birthday);
-        imageIds.put("2",R.drawable.confused);
-        imageIds.put("3",R.drawable.funny);
-        imageIds.put("4",R.drawable.embares);
-        imageIds.put("5",R.drawable.angry);
-        imageIds.put("6",R.drawable.machau);
-        imageIds.put("7",R.drawable.sorry);
-        imageIds.put("8",R.drawable.hii);
-        imageIds.put("9",R.drawable.hello);
-        imageIds.put("10",R.drawable.love);
-        imageIds.put("11",R.drawable.compliment);
-        imageIds.put("12",R.drawable.happy);
-        imageIds.put("13",R.drawable.sad);
-        imageIds.put("14",R.drawable.crying);
+        imageIds=new int[14];
+        imageIds[0] = R.drawable.birthday;
+        imageIds[1] = R.drawable.confused;
+        imageIds[2] = R.drawable.funny;
+        imageIds[3] = R.drawable.embares;
+        imageIds[4] = R.drawable.angry;
+        imageIds[5] = R.drawable.machau;
+        imageIds[6] = R.drawable.sorry;
+        imageIds[7] = R.drawable.hii;
+        imageIds[8] = R.drawable.hello;
+        imageIds[9] = R.drawable.love;
+        imageIds[10] = R.drawable.compliment;
+        imageIds[11] = R.drawable.happy;
+        imageIds[12] = R.drawable.sad;
+        imageIds[13] = R.drawable.crying;
     }
 
 
