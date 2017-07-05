@@ -12,45 +12,42 @@ import java.util.HashMap;
  */
 
 public class SessionManager {
-    //SharedPreferences
-    SharedPreferences preferences;
-    //Editor for shared preferences
-    SharedPreferences.Editor editor;
-    //Context
-    Context context;
-    //Shared pref mode
-    int PRIVATE_MODE = 0;
     //Sharedpref filename
     // Sharedpref file name
     private static final String PREF_NAME = "UserPref";
-
     // All Shared Preferences Keys
     private static final String IS_LOGIN = "IsLoggedIn";
-
     // User name (make variable public to access from outside)
-    public static final String KEY_NAME = "name";
+    private static final String KEY_NAME = "name";
+    // Phone Number (make variable public to access from outside)
+    private static final String KEY_NUMBER = "number";
+    //SharedPreferences
+    private SharedPreferences preferences;
+    //Editor for shared preferences
+    private SharedPreferences.Editor editor;
+    //Context
+    private Context context;
 
-    // Email address (make variable public to access from outside)
-    public static final String KEY_NUMBER = "number";
     //constructor
-    public SessionManager(Context context){
+    SessionManager(Context context) {
         this.context = context;
-        preferences = this.context.getSharedPreferences(PREF_NAME,PRIVATE_MODE);
+        int PRIVATE_MODE = 0;
+        preferences = this.context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = preferences.edit();
     }
 
     /**
      * create login session
      */
-    public void createLoginSession(String userName, String userNumber){
+    public void createLoginSession(String userName, String userNumber) {
         //Storing login value as true
-        editor.putBoolean(IS_LOGIN,true);
+        editor.putBoolean(IS_LOGIN, true);
 
         //storing name in pref
-        editor.putString(KEY_NAME,userName);
+        editor.putString(KEY_NAME, userName);
 
         //storing nmber in pref
-        editor.putString(KEY_NUMBER,userNumber);
+        editor.putString(KEY_NUMBER, userNumber);
 
         //commit changer
         editor.commit();
@@ -62,7 +59,7 @@ public class SessionManager {
      * get stored session data
      */
 
-    public HashMap<String,String> getUserDetails(){
+    public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<String, String>();
         // user name
         user.put(KEY_NAME, preferences.getString(KEY_NAME, null));
@@ -73,42 +70,44 @@ public class SessionManager {
         // return user
         return user;
     }
+
     /**
      * checkLogin method will check if the user is logged in or not
      * and then redirect the user to login activity
      * else wont do anything
      */
-    public void checkLogIn(){
+    public void checkLogIn() {
         // Check login status
-        if(!this.isLoggedIn()){
-            // user is not logged in redirect him to Login Activity
-            Intent i = new Intent(context, LoginActivity.class);
+        if (!this.isLoggedIn()) {
+            // user is not logged intent redirect him to Login Activity
+            Intent intent = new Intent(context, LoginActivity.class);
             // Closing all the Activities
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             // Add new Flag to start new Activity
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             // Staring Login Activity
-            context.startActivity(i);
+            context.startActivity(intent);
 
             //finish current activity
-            ((Activity)context).finish();
+            ((Activity) context).finish();
 
         }
 
     }
+
     /**
      * clear session details to logout the user
      * this method can be called whenever we wish to logout the user
      */
 
-    public void logoutUser(){
+    public void logoutUser() {
         //clearing all data from shared preferences
         editor.clear();
         editor.commit();
         //after logging out the user must be directed to the login activity
-        Intent intent = new Intent(context,LoginActivity.class);
+        Intent intent = new Intent(context, LoginActivity.class);
         //after this close all the running activities and background services
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //add new flag to start new activity
@@ -119,9 +118,9 @@ public class SessionManager {
 
     /**
      * Quick check for login
-     * **/
+     **/
     // Get Login State
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
         return preferences.getBoolean(IS_LOGIN, false);
     }
 

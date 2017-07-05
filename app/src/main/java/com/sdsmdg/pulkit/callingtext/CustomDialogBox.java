@@ -12,8 +12,8 @@ import android.widget.TextView;
 import pl.droidsonroids.gif.GifImageView;
 
 public class CustomDialogBox extends AppCompatActivity {
-    TextView t;
-    GifImageView g;
+    TextView textView;
+    GifImageView gifImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -27,11 +27,11 @@ public class CustomDialogBox extends AppCompatActivity {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(10);
         layout.setBackgroundDrawable(rectShapeDrawable);
-       t = (TextView)findViewById(R.id.textView5);
-       g=(GifImageView)findViewById(R.id.imageView2);
+       textView = (TextView)findViewById(R.id.textView5);
+       gifImageView =(GifImageView)findViewById(R.id.imageView2);
        int id=Integer.parseInt(CallManager.msg.substring(CallManager.msg.lastIndexOf(" ")+1));
-        g.setImageResource(BaseActivity.imageIds.get(String.valueOf(id)));
-      t.setText((CallManager.msg).substring(0,CallManager.msg.lastIndexOf(" ")));
+        gifImageView.setImageResource(BaseActivity.imageIds[id]);
+      textView.setText((CallManager.msg).substring(0,CallManager.msg.lastIndexOf(" ")));
     }
     public void ok(View v)
     {

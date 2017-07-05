@@ -67,7 +67,7 @@ public class GifFragment extends DialogFragment implements View.OnClickListener 
         try {
             mCallback = (onImageselectionListener) activity;
         } catch (ClassCastException e) {
-            Log.i("Error", e.getMessage());
+            Log.e("Error", e.getMessage());
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
