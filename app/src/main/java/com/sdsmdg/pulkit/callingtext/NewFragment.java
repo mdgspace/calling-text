@@ -43,7 +43,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     GifFragment fragment;
     View view;
     Button call;
-    public static String gifNumber1;
+    public static int gifNumber1;
     private static final int CONTACTS_LOADER_ID = 1;
     private WindowManager windowManager;
 
@@ -58,9 +58,9 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         yourNumber = "7248187747";
         t1 = (TextView) view.findViewById(R.id.textView5);
         img = (GifImageView) view.findViewById(R.id.imageView3);
-        if (BaseActivity.mnumber != null) {
-            Log.i("Number selected ", BaseActivity.mnumber);
-            editText1.setText(BaseActivity.mnumber);
+        if (BaseActivity.mNumber != null) {
+            Log.i("Number selected ", BaseActivity.mNumber);
+            editText1.setText(BaseActivity.mNumber);
         }
 
         fl = (FrameLayout) view.findViewById(R.id.color);
@@ -83,7 +83,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                     if (editText2.getText().toString() != null && editText1.getText().toString() != null) {
                         BackGroundWorker b = new BackGroundWorker(getActivity(), 2);
                         Log.e("number", editText1.getText().toString());
-                        b.execute(yourNumber, editText1.getText().toString(), editText2.getText().toString(), gifNumber1);
+                        b.execute(yourNumber, editText1.getText().toString(), editText2.getText().toString(), String.valueOf(gifNumber1));
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         BaseActivity.calledByapp = true;
                         callIntent.setData(Uri.parse("tel:" + editText1.getText().toString()));
@@ -140,10 +140,10 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void setImage(String gifNumber) {
+    public void setImage(int gifNumber) {
         fl.setAlpha(0);
         gifNumber1 = gifNumber;
-        img.setImageResource(BaseActivity.imageIds.get(gifNumber));
+        img.setImageResource(BaseActivity.imageIds[gifNumber1-1]);
         call.setVisibility(View.VISIBLE);
     }
 
@@ -209,7 +209,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.i("NewFragment", "Attached");
-//        editName.setText(BaseActivity.getMname());
+//        editName.setText(BaseActivity.getmName());
 
 
     }

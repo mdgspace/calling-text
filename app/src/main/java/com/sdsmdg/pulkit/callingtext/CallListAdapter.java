@@ -19,15 +19,16 @@ import java.util.List;
 
 public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ListViewHolder> {
 
-    List<CallerDetails> callerList;
-    Activity parentAct;
-    int mExpandedPosition=-1;
-    RecyclerView recyclerView;
-    Long timeDiff;
+    private List<CallerDetails> callerList;
+    private Activity parentAct;
+    private int mExpandedPosition = -1;
+    private RecyclerView recyclerView;
+    private Long timeDiff;
 
     public CallListAdapter(List<CallerDetails> historyList, Activity activity, RecyclerView recyclerView1) {
+
         this.callerList = historyList;
-        this.recyclerView=recyclerView1;
+        this.recyclerView = recyclerView1;
         parentAct = activity;
     }
 
@@ -46,60 +47,63 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ListVi
         holder.vNumber.setText((CharSequence) callerDetails.getCaller_number());
         holder.vMsg.setText((CharSequence) callerDetails.getCaller_msg());
         timeDiff = (Long.valueOf(System.currentTimeMillis())-Long.parseLong((String) callerDetails.getCall_time()))/1000;
+
         holder.time.setText(getTime(timeDiff));
+
         final boolean isExpanded = position==mExpandedPosition;
 
         if (callerDetails.getCall_type().equals("outgoing")) {
+
             holder.type.setImageResource(R.drawable.call_made);
         } else if (callerDetails.getCall_type().equals("incoming")) {
             holder.type.setImageResource(R.drawable.call_received);
         }
 
     }
-    public String getTime(Long timeDiff)
-    {
+
+    public String getTime(Long timeDiff) {
         String time;
-        Long minutes = timeDiff/60;
-        Integer hours = minutes.intValue()/60;
-        Integer days = hours/24;
-        if(timeDiff<60){
-            if(timeDiff==1){
-                time = " "+timeDiff.toString() + " second ago";
+        Long minutes = timeDiff / 60;
+        Integer hours = minutes.intValue() / 60;
+        Integer days = hours / 24;
+        if (timeDiff < 60) {
+            if (timeDiff == 1) {
+                time = " " + timeDiff.toString() + " second ago";
             } else {
-                time = " "+timeDiff.toString() + " seconds ago";
+                time = " " + timeDiff.toString() + " seconds ago";
             }
-        }else {
+        } else {
             if (minutes < 60) {
-                if(minutes==1){
-                    time = " "+minutes.toString() + " minute ago";
+                if (minutes == 1) {
+                    time = " " + minutes.toString() + " minute ago";
                 } else {
-                    time = " "+minutes.toString() + " minutes ago";
+                    time = " " + minutes.toString() + " minutes ago";
                 }
 
 
             } else {
                 if (hours < 25) {
-                    if(hours==1){
-                        time = " "+hours.toString() + " hour ago";
+                    if (hours == 1) {
+                        time = " " + hours.toString() + " hour ago";
 
-                    }else {
-                        time = " "+hours.toString() + " hours ago";
+                    } else {
+                        time = " " + hours.toString() + " hours ago";
 
                     }
 
                 } else {
-                    if(days==1){
-                        time = " "+days.toString() + " day ago";
+                    if (days == 1) {
+                        time = " " + days.toString() + " day ago";
 
-                    }else {
-                        time = " "+days.toString() + " days ago";
+                    } else {
+                        time = " " + days.toString() + " days ago";
 
                     }
                 }
             }
 
         }
-return time;
+        return time;
 
     }
 
@@ -111,13 +115,13 @@ return time;
     public class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         protected TextView vName;
-        protected TextView vNumber;
-        protected TextView vMsg;
-        protected ImageView type;
         protected TextView time;
         protected ImageView call;
+        TextView vNumber;
+        TextView vMsg;
+        ImageView type;
 
-        public ListViewHolder(View vi) {
+        ListViewHolder(View vi) {
             super(vi);
             vNumber = (TextView) vi.findViewById(R.id.number);
             vMsg = (TextView) vi.findViewById(R.id.message);
