@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,11 +30,16 @@ public class DataBaseHandler extends SQLiteOpenHelper{
     private static DataBaseHandler instance = null;
     private Context context;
 
-    DataBaseHandler(Context context) {
+     DataBaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context=context;
     }
 
+    /**
+     * to get the instance of the database handler class
+     * @param context to be passed in from the activity
+     * @return a databasehandler object
+     */
     public static DataBaseHandler getInstance(Context context) {
         if(instance == null) {
             instance = new DataBaseHandler(context);
@@ -60,6 +62,9 @@ public class DataBaseHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
+    /**
+     * Clears the entire sqlite database
+     */
     public void clear() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_CALLERS + ";");
@@ -67,7 +72,11 @@ public class DataBaseHandler extends SQLiteOpenHelper{
 
     }
 
-    public void addCaller(CallerDetails cd) {
+    /**
+     * Adds a caller to the list.
+     * @param cd
+     */
+    void addCaller(CallerDetails cd) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(CALLER_NAME,cd.caller_name);
@@ -79,7 +88,13 @@ public class DataBaseHandler extends SQLiteOpenHelper{
         db.close();
     }
 
-    public void addUser(String name,String password)
+    /**
+     * Adds a new user to the sqLite database
+     * @param name Name of the user
+     * @param password of the user
+     *                 to be entered in Login Activity
+     */
+    void addUser(String name, String password)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -89,7 +104,11 @@ public class DataBaseHandler extends SQLiteOpenHelper{
         db.close();
     }
 
-    public List<CallerDetails> getAllCallers() {
+    /**
+     * Gets the list of all the callers
+     * @return the caller list
+     */
+    List<CallerDetails> getAllCallers() {
         List<CallerDetails> userList = new ArrayList<>();
         String query = "SELECT * FROM " + TABLE_CALLERS;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -103,6 +122,12 @@ public class DataBaseHandler extends SQLiteOpenHelper{
         Collections.reverse(userList);
         return userList;
     }
+
+    /**
+     * Gets the details of the user from the sqLite database
+     * @param name of the user
+     * @return
+     */
     public String getUser(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_login, new String[]{NAME,PASSWORD}, NAME + "=?", new String[]{NAME}, null, null, null, null);
