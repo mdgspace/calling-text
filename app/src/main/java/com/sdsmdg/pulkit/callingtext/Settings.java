@@ -14,8 +14,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Settings extends AppCompatActivity {
 
-    EditText et_number,et_status ;
-    Button btn_save;
+    EditText editTextNumber, editTextStatus ;
+    Button saveButton;
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users_status");
     SharedPreferences pref;
 
@@ -23,35 +23,28 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        et_number = (EditText)findViewById(R.id.et_number);
-        et_status = (EditText)findViewById(R.id.et_status);
-        btn_save = (Button)findViewById(R.id.btn_save);
+        editTextNumber = (EditText)findViewById(R.id.et_number);
+        editTextStatus = (EditText)findViewById(R.id.et_status);
+        saveButton = (Button)findViewById(R.id.btn_save);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        btn_save.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(et_number.getText()!=null){
-                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("NUMBER", et_number.getText().toString()).apply();
-                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("STATUS", et_status.getText().toString()).apply();
-
-                    // Adding the user status to the firebase database
-                    // Adding the user's status to the firebase database as a child of users_status reference
-
-                    reference.child(et_number.getText().toString()).setValue(et_status.getText().toString());
-
+                if(editTextNumber.getText()!=null){
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("NUMBER", editTextNumber.getText().toString()).apply();
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("STATUS", editTextStatus.getText().toString()).apply();
+                    /*
+                     * Adding the user status to the firebase database
+                     * Adding the user's status to the firebase database as a child of users_status reference
+                     * reference.child(editTextNumber.getText().toString()).setValue(editTextStatus.getText().toString());
+                     */
                     Toast.makeText(getBaseContext(),"NUMBER SAVED",Toast.LENGTH_LONG).show();
-
                 }else {
                     Toast.makeText(getBaseContext(),"PLEASE ENTER NUMBER",Toast.LENGTH_LONG).show();
                 }
-
-
             }
-
         });
-
-
     }
 }

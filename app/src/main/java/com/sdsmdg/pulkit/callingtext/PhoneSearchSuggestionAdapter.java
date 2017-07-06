@@ -36,27 +36,22 @@ public class PhoneSearchSuggestionAdapter extends ArrayAdapter<PhoneContact> {
         this.phoneContacts = phoneContacts;
         this.layoutId = resource;
         mInflater = LayoutInflater.from(context);
-
     }
 
     @NonNull
     public View getView(int position, View convertView, ViewGroup parent) {
 
         ViewHolder holder;
-
         if (convertView == null) {
-
             convertView = mInflater.inflate(layoutId, parent, false);
             holder = new ViewHolder();
             holder.name = (TextView) convertView.findViewById(R.id.list_item_name);
             holder.phone = (TextView) convertView.findViewById(R.id.list_item_phone);
             convertView.setTag(holder);
-
-            }
-
-            else{
-                holder = (ViewHolder) convertView.getTag();
-            }
+        }
+        else{
+            holder = (ViewHolder) convertView.getTag();
+        }
 
         PhoneContact contact = getItem(position);
         if (contact != null){

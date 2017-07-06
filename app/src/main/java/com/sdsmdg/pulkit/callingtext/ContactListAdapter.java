@@ -32,10 +32,7 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
 
     public interface OnItemClickListener {
         public void onItemClick();
-
     }
-
-
 
     ContactListAdapter(List<ArrayList> contactList1, Activity activity, OnItemClickListener listener) {
         Log.e("pil", "in adapter");
@@ -43,7 +40,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
         parentAct = activity;
         this.listener = listener;
     }
-
 
     @Override
     public ContactListAdapter.ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -67,8 +63,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
 //                intent.putExtra("name",(String)contactList.get(position).get(0));
 //                intent.putExtra("number",(String)contactList.get(position).get(1));
 //                v.getContext().startActivity(intent);
-
-
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +73,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
                 BaseActivity.setMnumber(holder.phoneNumber.getText().toString());
 
                 Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getMname()+" "+BaseActivity.getMnumber());
-
             }
         });
 
@@ -87,9 +80,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
             //animate(itemView, i);
         }
     }
-
-
-
 
     private void animate(final View view, final int position) {
         view.animate();
@@ -110,8 +100,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
         protected TextView phoneNumber;
         protected ImageButton textsmsLogo;
 
-
-
         public ListViewHolder(final View vi) {
             super(vi);
             Log.e("pil", "in adapter");
@@ -122,8 +110,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
             textsmsLogo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                 }
             });
         }
