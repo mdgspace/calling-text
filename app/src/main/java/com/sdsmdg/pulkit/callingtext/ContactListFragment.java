@@ -67,6 +67,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     ScaleInAnimationAdapter alphaAdapter;
     OnContactsLoaded onContactsLoaded;
     ContactListAdapter ca;
+    int mShortDurationTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,10 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         backButton = (ImageView) view.findViewById(R.id.backbutton);
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchbox);
         result = new ArrayList<>();
+        // Initially hide the content view.
+        recList.setVisibility(View.GONE);
+        // Retrieve and cache the system's default "short" animation time.
+        mShortDurationTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         // To retain the contact list when the fragments are swiped or device is rotated
         result = new ArrayList<>();
@@ -446,7 +451,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         @Override
         protected void onPostExecute(List<ArrayList> output) {
             super.onPostExecute(output);
-            mProgress.dismiss();
             result = output;
             setContactListAdapter();
             onContactsLoaded.saveContacts(output, phoneContactsList);
@@ -477,5 +481,19 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         alphaAdapter.setDuration(1000);
         alphaAdapter.setFirstOnly(false);
         recList.setAdapter(alphaAdapter);
+        crossFade();
+    }
+
+    private void crossFade() {
+
+        // Set the recycler view to 0% opacity but visible, so that it is visible
+        // (but fully transparent) during the animation.
+        recList.setAlpha(0);
+        recList.setVisibility(View.VISIBLE);
+        // dismiss the progress bar
+        mProgress.dismiss();
+        // Animate the content view to 100% opacity, and clear any animation
+        // listener set on the view.
+        recList.animate().alpha(1).setDuration(mShortDurationTime);
     }
 }
