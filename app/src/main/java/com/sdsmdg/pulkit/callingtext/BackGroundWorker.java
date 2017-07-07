@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,17 +15,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
-import java.util.Observable;
 
 /**
  * Created by this pc on 08-08-2016.
  */
 public class BackGroundWorker extends AsyncTask<String, Void, String> {
     private Context context;
-    String caller, receiver;
+    private String caller, receiver;
     int n1;
     CallManager cm;
-    String name;
+    private String name;
     String number;
     String type;
     String time;
@@ -34,11 +32,11 @@ public class BackGroundWorker extends AsyncTask<String, Void, String> {
     public static String value = "";
     public static String gifId;
     public static String msg;
-    DataBaseHandler dbh;
-    resultInterface mCallback;
-    DatabaseReference callertree = FirebaseDatabase.getInstance().getReference().child("caller");
-    DatabaseReference receivertree = FirebaseDatabase.getInstance().getReference().child("receiver");
-    DatabaseReference dr = FirebaseDatabase.getInstance().getReference();
+    private DataBaseHandler dbh;
+    private resultInterface mCallback;
+    private DatabaseReference callertree = FirebaseDatabase.getInstance().getReference().child("caller");
+    private DatabaseReference receivertree = FirebaseDatabase.getInstance().getReference().child("receiver");
+    private DatabaseReference dr = FirebaseDatabase.getInstance().getReference();
 
     public BackGroundWorker(Context context1, int n) {
         mCallback=(CallManager)new CallManager();

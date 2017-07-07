@@ -41,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This function adds a user by checking whether the username and phone number is valid or not
+     */
     private void setUser() {
         //get username and usernumber from editText
         userName = nameEditText.getText().toString();

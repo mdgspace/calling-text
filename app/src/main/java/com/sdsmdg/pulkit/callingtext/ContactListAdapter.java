@@ -1,7 +1,6 @@
 package com.sdsmdg.pulkit.callingtext;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -69,9 +67,9 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
             @Override
             public void onClick(View v) {
                 listener.onItemClick();
-                BaseActivity.setMname(holder.name.getText().toString());
-                BaseActivity.setMnumber(holder.phoneNumber.getText().toString());
-                Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getMname()+" "+BaseActivity.getMnumber());
+                BaseActivity.setmName(holder.name.getText().toString());
+                BaseActivity.setmNumber(holder.phoneNumber.getText().toString());
+                Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getmName()+" "+BaseActivity.getmNumber());
 
             }
         });
