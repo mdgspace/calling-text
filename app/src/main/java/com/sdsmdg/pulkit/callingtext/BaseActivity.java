@@ -1,7 +1,6 @@
 package com.sdsmdg.pulkit.callingtext;
 
 import android.app.ActionBar;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -30,56 +29,25 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     public android.support.v7.app.ActionBar actionBar;
     FragmentManager fragmentManager;
     GifFragment fragment;
-    Button btn_settings;
-    public static String mname, mnumber;
+    public static String mName, mNumber;
     public static Boolean calledByapp = false;
     public static List<ArrayList> savedContacts;
     public static ArrayList<PhoneContact> savedPhoneContacts;
-
-    public static HashMap<String,Integer> imageIds;
-
     //session manager class
     SessionManager session;
-
-
-    public static String getMname() {
-        return mname;
-    }
-
-    public static void setMname(String mname) {
-        BaseActivity.mname = mname;
-    }
-
-    public static String getMnumber() {
-        return mnumber;
-    }
-
-    public static void setMnumber(String mnumber) {
-        BaseActivity.mnumber = mnumber;
-    }
-
-    public static List<ArrayList> getSavedContacts() {
-        return savedContacts;
-    }
-
-    public static ArrayList<PhoneContact> getSavedPhoneContacts(){
-        return savedPhoneContacts;
-    }
-
+    private TabLayout tabLayout;
+    public static int[] imageIds;
     public static String receiver = "7248187747";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-
-        //session class instance
-        session = new SessionManager(getApplicationContext());
-        /**
-         * call this function when you want to check if the user is logged in or not
-         * this will check if the user is logged in or not and then direct it to login activity
-         */
-        session.checkLogIn();
+        //to initialise all the global variables
+        initVariables();
+        session.checkLogIn();//check login session
+        setListenersAndAdapters();
+        setImageIds();
 
         // To retain the contact list when the device is rotated
         if (savedInstanceState != null){
@@ -95,15 +63,8 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         TelephonyManager telephoneManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = telephoneManager.getLine1Number();
         Log.e("MY BA NO.", "PHONE NO." + mPhoneNumber);
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        // actionBar = getSupportActionBar();
-
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+      
         int pg_number = 0;
-        viewPager.setAdapter(mAdapter);
-//        if(PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("NUMBER", "7248187747")!=null){
-//            receiver = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString("NUMBER", "7248187747");
-//        }
 
         if (getIntent().getExtras() != null) {
             try {
@@ -115,26 +76,6 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         }
         viewPager.setCurrentItem(pg_number);
 
-        imageIds=new HashMap<>();
-        imageIds.put("1",R.drawable.birthday);
-        imageIds.put("2",R.drawable.confused);
-        imageIds.put("3",R.drawable.funny);
-        imageIds.put("4",R.drawable.embares);
-        imageIds.put("5",R.drawable.angry);
-        imageIds.put("6",R.drawable.machau);
-        imageIds.put("7",R.drawable.sorry);
-        imageIds.put("8",R.drawable.hii);
-        imageIds.put("9",R.drawable.hello);
-        imageIds.put("10",R.drawable.love);
-        imageIds.put("11",R.drawable.compliment);
-        imageIds.put("12",R.drawable.happy);
-        imageIds.put("13",R.drawable.sad);
-        imageIds.put("14",R.drawable.crying);
-
-       /* actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);*/
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         startService(new Intent(this, BackgroundService.class));
     }
@@ -174,7 +115,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
 
         if (newFragment != null) {
             Log.e("in null", "in null");
-            newFragment.setImage(position);
+            newFragment.setImage(Integer.parseInt(position));
         }
     }
 
@@ -189,4 +130,83 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("phoneContactsList", savedPhoneContacts);
     }
+
+    /**
+     * This function sets up adapters and click listeners
+     */
+    private void setListenersAndAdapters(){
+        btn_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(BaseActivity.this, Settings.class);
+                startActivity(settingsIntent);
+            }
+        });
+
+        viewPager.setAdapter(mAdapter);
+
+    }
+
+    /**
+     * This function initializes various new variables
+     */
+    private void initVariables(){
+        //session class instance
+        session = new SessionManager(getApplicationContext());
+        btn_settings = (Button) findViewById(R.id.btn_settings);
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+    }
+
+    /**
+     * This function sets up the image ids.
+     */
+    private void setImageIds(){
+        imageIds=new int[19];
+        imageIds[0] = R.drawable.birthday;
+        imageIds[1] = R.drawable.confused;
+        imageIds[2] = R.drawable.funny;
+        imageIds[3] = R.drawable.embares;
+        imageIds[4] = R.drawable.angry;
+        imageIds[5] = R.drawable.machau;
+        imageIds[6] = R.drawable.sorry;
+        imageIds[7] = R.drawable.hii;
+        imageIds[8] = R.drawable.hello;
+        imageIds[9] = R.drawable.love;
+        imageIds[10] = R.drawable.compliment;
+        imageIds[11] = R.drawable.happy;
+        imageIds[12] = R.drawable.sad;
+        imageIds[13] = R.drawable.crying;
+        imageIds[14] = R.drawable.worried;
+        imageIds[15] = R.drawable.praying;
+        imageIds[16] = R.drawable.smoking;
+        imageIds[17] = R.drawable.birthday;
+        imageIds[18] = R.drawable.envy;
+    }
+
+    public static String getmName() {
+        return mName;
+    }
+
+    public static void setmName(String mName) {
+        BaseActivity.mName = mName;
+    }
+
+    public static String getmNumber() {
+        return mNumber;
+    }
+
+    public static void setmNumber(String mNumber) {
+        BaseActivity.mNumber = mNumber;
+    }
+  
+    public static List<ArrayList> getSavedContacts() {
+        return savedContacts;
+    }
+
+    public static ArrayList<PhoneContact> getSavedPhoneContacts(){
+        return savedPhoneContacts;
+    }
+
 }

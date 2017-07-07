@@ -1,6 +1,5 @@
 package com.sdsmdg.pulkit.callingtext;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
-
+import android.widget.Toast;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,19 +42,47 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.activity_history, container, false);
+        view = inflater.inflate(R.layout.activity_history, container, false);
         recList = (RecyclerView) view.findViewById(R.id.history_recycler);
         dbh = DataBaseHandler.getInstance(getContext());
         addToList();
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) view.findViewById(R.id.main_swipe);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
+            @Override
+            public void onRefresh() {
                 addToList();
                 new HistoryFragment.Task().execute();
             }
         });
+
         return view;
     }
+
+    private List<CallerDetails> createList() {
+        List<CallerDetails> result;
+        result = dbh.getAllCallers();
+        Log.e("result", result + "");
+        return result;
+    }
+
+
+    /**
+     * This function adds various calls in the history segment to the list
+     */
+    public void addToList() {
+
+        recList.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(linearLayoutManager);
+        CallListAdapter callListAdapter = new CallListAdapter(createList(), getActivity(), recList);
+        ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(callListAdapter);
+        alphaAdapter.setInterpolator(new OvershootInterpolator());
+        alphaAdapter.setDuration(1000);
+        alphaAdapter.setFirstOnly(false);
+        recList.setAdapter(alphaAdapter);
+    }
+
     private class Task extends AsyncTask<Void, Void, String[]> {
 
         @Override
@@ -65,36 +92,18 @@ public class HistoryFragment extends Fragment {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }return new String[0];
+            }
+            return new String[0];
         }
 
-        @Override protected void onPostExecute(String[] result) {
+        @Override
+        protected void onPostExecute(String[] result) {
             // Call setRefreshing(false) when the list has been refreshed.
             mWaveSwipeRefreshLayout.setRefreshing(false);
             super.onPostExecute(result);
         }
     }
-
-    private List<CallerDetails> createList() {
-        List<CallerDetails> result;
-        result=dbh.getAllCallers();
-        Log.e("result",result+"");
-        return result;
-    }
-    public void addToList(){
-
-        recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
-        CallListAdapter ca = new CallListAdapter(createList(),getActivity(),recList);
-        ScaleInAnimationAdapter alphaAdapter = new ScaleInAnimationAdapter(ca);
-        alphaAdapter.setInterpolator(new OvershootInterpolator());
-        alphaAdapter.setDuration(1000);
-        alphaAdapter.setFirstOnly(false);
-        recList.setAdapter(alphaAdapter);
-    }
-
+  
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -113,5 +122,4 @@ public class HistoryFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

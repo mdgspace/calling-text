@@ -35,7 +35,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     private final int REQUEST_CODE = 1;
     EditText editText1;
     EditText editText2;
-    //    public EditText editName;
     String yourNumber, yourName;
     String receiver;
     String name;
@@ -48,7 +47,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     GifFragment fragment;
     View view;
     Button call;
-    public static String gifNumber1;
+    public static int gifNumber1;
     private static final int CONTACTS_LOADER_ID = 1;
     private WindowManager windowManager;
 
@@ -64,9 +63,9 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         yourNumber = "7248187747";
         t1 = (TextView) view.findViewById(R.id.textView5);
         img = (GifImageView) view.findViewById(R.id.imageView3);
-        if (BaseActivity.mnumber != null) {
-            Log.i("Number selected ", BaseActivity.mnumber);
-            editText1.setText(BaseActivity.mnumber);
+        if (BaseActivity.mNumber != null) {
+            Log.i("Number selected ", BaseActivity.mNumber);
+            editText1.setText(BaseActivity.mNumber);
         }
 
         fl = (FrameLayout) view.findViewById(R.id.color);
@@ -74,6 +73,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         rl = (RelativeLayout) view.findViewById(R.id.my_layout);
         img.setOnClickListener(this);
         call = (Button) view.findViewById(R.id.button4);
+        call.setText("CALL");
         call.setOnClickListener(this);
         fl.setAlpha(0);
         return view;
@@ -90,8 +90,10 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
                         BackGroundWorker b = new BackGroundWorker(getActivity(), 2);
                         Log.e("number", editText1.getText().toString());
-                        b.execute(yourNumber, editText1.getText().toString(), editText2.getText().toString(), gifNumber1);
-                        final Intent callIntent = new Intent(Intent.ACTION_CALL);
+
+                        b.execute(yourNumber, editText1.getText().toString(), editText2.getText().toString(), String.valueOf(gifNumber1));
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+
                         BaseActivity.calledByapp = true;
                         callIntent.setData(Uri.parse("tel:" + editText1.getText().toString()));
                         Log.e("receiver", "tel:" + editText1.getText().toString());
@@ -100,7 +102,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                         while (phones.moveToNext()) {
                             name = phones.getString(phones.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
                         }
-                        CallerDetails cd = new CallerDetails(name,editText1.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()));
+                        CallerDetails cd = new CallerDetails(name,editText1.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()),null);
                         DataBaseHandler dbh=DataBaseHandler.getInstance(getContext());
                         dbh.addCaller(cd);
                         startActivity(callIntent);
@@ -147,10 +149,10 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(true);
     }
 
-    public void setImage(String gifNumber) {
+    public void setImage(int gifNumber) {
         fl.setAlpha(0);
         gifNumber1 = gifNumber;
-        img.setImageResource(BaseActivity.imageIds.get(gifNumber));
+        img.setImageResource(BaseActivity.imageIds[gifNumber1-1]);
         call.setVisibility(View.VISIBLE);
     }
 
@@ -206,7 +208,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.i("NewFragment", "Attached");
-//        editName.setText(BaseActivity.getMname());
+//        editName.setText(BaseActivity.getmName());
 
 
     }

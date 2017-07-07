@@ -50,8 +50,8 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
 
     public RecyclerView recList;
-    Button button;
     public ImageButton button1;
+    Button button;
     EditText et1;
     static List<ArrayList> result;
     View view;
@@ -213,26 +213,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         return view;
     }
 
-    private class Task extends AsyncTask<Void, Void, String[]> {
-
-        @Override
-        protected String[] doInBackground(Void... params) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return new String[0];
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            // Call setRefreshing(false) when the list has been refreshed.
-            mWaveSwipeRefreshLayout.setRefreshing(false);
-            super.onPostExecute(result);
-        }
-    }
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         /*
@@ -262,7 +242,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-    
+
   // Previous Code
   /*
     private List<ArrayList> createList() {
@@ -318,21 +298,18 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
         }
         Log.e("result", contactList + "");
-        ContactListAdapter ca = new ContactListAdapter(contactList, getActivity(), new ContactListAdapter.OnItemClickListener() {
+        ContactListAdapter contactListAdapter = new ContactListAdapter(contactList, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
                 Log.i("OnClick", "inside the onclick of the adapter");
-                Intent i = new Intent(getContext(), BaseActivity.class);
-                i.putExtra("pagenumber", "2");
-                Log.e("OnClick", "internt set !! ");
-                startActivity(i);
-                Log.e("OnClick", "finisherererer");
+                Intent intent = new Intent(getContext(), BaseActivity.class);
+                intent.putExtra("pagenumber", "2");
+                startActivity(intent);
                 getActivity().finish();
 
             }
         });
         recList.setAdapter(ca);
-
     }
 
     @Override
@@ -495,5 +472,25 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         // Animate the content view to 100% opacity, and clear any animation
         // listener set on the view.
         recList.animate().alpha(1).setDuration(mShortDurationTime);
+    }
+
+    private class Task extends AsyncTask<Void, Void, String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return new String[0];
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            // Call setRefreshing(false) when the list has been refreshed.
+            mWaveSwipeRefreshLayout.setRefreshing(false);
+            super.onPostExecute(result);
+        }
     }
 }

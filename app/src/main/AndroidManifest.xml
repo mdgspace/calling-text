@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -60,10 +61,10 @@
         <activity android:name=".Splashactivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     <activity
             android:name=".Settings"
             android:parentActivityName=".BaseActivity"
@@ -72,10 +73,9 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".BaseActivity" />
-
         </activity>
         <activity android:name=".LoginActivity"/>
-
+        <activity android:name=".RecentCalls"/>
     </application>
 
 </manifest>

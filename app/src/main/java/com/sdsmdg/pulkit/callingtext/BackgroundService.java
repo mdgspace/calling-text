@@ -1,6 +1,5 @@
 package com.sdsmdg.pulkit.callingtext;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -20,12 +19,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class BackgroundService extends Service {
 
-    DatabaseReference callertree = FirebaseDatabase.getInstance().getReference().child("caller");
-    DatabaseReference receivertree = FirebaseDatabase.getInstance().getReference().child("receiver");
+
     DatabaseReference dr = FirebaseDatabase.getInstance().getReference();
     public static int count=0;
-    DataBaseHandler dbh;
-    String receiver;
     public void onCreate()
     {
 
@@ -67,7 +63,7 @@ public class BackgroundService extends Service {
         Intent restartServiceIntent = new Intent(getApplicationContext(), this.getClass());
         restartServiceIntent.setPackage(getPackageName());
 
-        PendingIntent restartServicePendingIntent = PendingIntent.getService(getApplicationContext(), 1, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
+        //PendingIntent restartServicePendingIntent = PendingIntent.getService(getApplicationContext(), 1, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT);
 //        AlarmManager alarmService = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 //        alarmService.set(
 //                AlarmManager.ELAPSED_REALTIME,

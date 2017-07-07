@@ -32,6 +32,7 @@ public class Settings extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(editTextNumber.getText()!=null){
                     PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("NUMBER", editTextNumber.getText().toString()).apply();
                     PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putString("STATUS", editTextStatus.getText().toString()).apply();
