@@ -30,7 +30,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     private final int REQUEST_CODE = 1;
     EditText editText1;
     EditText editText2;
-    //    public EditText editName;
     String yourNumber, yourName;
     String receiver;
     String name;
@@ -68,6 +67,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         rl = (RelativeLayout) view.findViewById(R.id.my_layout);
         img.setOnClickListener(this);
         call = (Button) view.findViewById(R.id.button4);
+        call.setText("CALL");
         call.setOnClickListener(this);
         fl.setAlpha(0);
         return view;
@@ -93,7 +93,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                         while (phones.moveToNext()) {
                             name = phones.getString(phones.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
                         }
-                        CallerDetails cd = new CallerDetails(name,editText1.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()));
+                        CallerDetails cd = new CallerDetails(name,editText1.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()),null);
                         DataBaseHandler dbh=DataBaseHandler.getInstance(getContext());
                         dbh.addCaller(cd);
                         startActivity(callIntent);

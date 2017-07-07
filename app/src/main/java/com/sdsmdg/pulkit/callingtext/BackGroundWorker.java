@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -25,11 +26,12 @@ public class BackGroundWorker extends AsyncTask<String, Void, String> {
     CallManager cm;
     private String name;
     String number;
-    private String type;
-    private String time;
-    static String value = "";
-    static String gifId;
-    static String msg;
+    String type;
+    String time;
+    String duration;
+    public static String value = "";
+    public static String gifId;
+    public static String msg;
     private DataBaseHandler dbh;
     private resultInterface mCallback;
     private DatabaseReference callertree = FirebaseDatabase.getInstance().getReference().child("caller");
@@ -81,7 +83,8 @@ public class BackGroundWorker extends AsyncTask<String, Void, String> {
                     number = BackGroundWorker.value;
                     type = "incoming";
                     time = String.valueOf(new Date().getTime());
-                    CallerDetails cd =new CallerDetails(name,number,msg,type,time);
+                    duration=String.valueOf(CallLog.Calls.DURATION);
+                    CallerDetails cd =new CallerDetails(name,number,msg,type,time,duration);
                     dbh= DataBaseHandler.getInstance(context);
                     dbh.addCaller(cd);
                     mCallback.getContent(msg + " " + gifId);
@@ -96,8 +99,9 @@ public class BackGroundWorker extends AsyncTask<String, Void, String> {
                     }
                     number = BackGroundWorker.value;
                     type = "incoming";
+                    duration=String.valueOf(CallLog.Calls.DURATION);
                     time = String.valueOf(new Date().getTime());
-                    CallerDetails cd =new CallerDetails(name,number,msg,type,time);
+                    CallerDetails cd =new CallerDetails(name,number,msg,type,time,duration);
                     dbh= DataBaseHandler.getInstance(context);
                     dbh.addCaller(cd);
 

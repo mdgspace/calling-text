@@ -43,11 +43,11 @@ public class CallListAdapter extends RecyclerView.Adapter<CallListAdapter.ListVi
 
     @Override
     public void onBindViewHolder(final CallListAdapter.ListViewHolder holder, final int position) {
+
         CallerDetails callerDetails = callerList.get(position);
         holder.vNumber.setText((CharSequence) callerDetails.getCaller_number());
         holder.vMsg.setText((CharSequence) callerDetails.getCaller_msg());
         timeDiff = (Long.valueOf(System.currentTimeMillis())-Long.parseLong((String) callerDetails.getCall_time()))/1000;
-
         holder.time.setText(getTime(timeDiff));
 
         final boolean isExpanded = position==mExpandedPosition;

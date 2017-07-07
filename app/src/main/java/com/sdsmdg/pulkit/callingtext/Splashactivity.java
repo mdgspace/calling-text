@@ -50,7 +50,7 @@ public class Splashactivity extends AppCompatActivity {
                            }
                         }
                     },
-                    5000
+                    1000
             );
 
 
@@ -77,7 +77,6 @@ public class Splashactivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Please grant the requested permissions.", Toast.LENGTH_SHORT).show();
             startHomeActivity();
-            finish();
         }
     }
 
