@@ -71,7 +71,7 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
                 BaseActivity.setmNumber(holder.phoneNumber.getText().toString());
                 Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getmName()+" "+BaseActivity.getmNumber());
 
-                Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getMname()+" "+BaseActivity.getMnumber());
+                Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getmName()+" "+BaseActivity.getmNumber());
             }
         });
 

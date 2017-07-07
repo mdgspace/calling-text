@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -135,16 +136,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
      * This function sets up adapters and click listeners
      */
     private void setListenersAndAdapters(){
-        btn_settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent settingsIntent = new Intent(BaseActivity.this, Settings.class);
-                startActivity(settingsIntent);
-            }
-        });
-
         viewPager.setAdapter(mAdapter);
-
     }
 
     /**
@@ -153,7 +145,6 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     private void initVariables(){
         //session class instance
         session = new SessionManager(getApplicationContext());
-        btn_settings = (Button) findViewById(R.id.btn_settings);
         viewPager = (ViewPager) findViewById(R.id.pager);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         tabLayout = (TabLayout) findViewById(R.id.tabs);
