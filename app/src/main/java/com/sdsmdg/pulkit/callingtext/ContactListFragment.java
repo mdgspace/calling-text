@@ -112,12 +112,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dimLayout.setVisibility(View.GONE);
-                searchLayout.setVisibility(View.GONE);
-                searchBox.clearFocus();
-                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-
+                removeDimLayout();
             }
         });
 
@@ -125,13 +120,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         dimLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dimLayout.setVisibility(View.GONE);
-                searchLayout.setVisibility(View.GONE);
-                searchBox.clearFocus();
-                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
-
-
+                removeDimLayout();
             }
         });
 
@@ -153,7 +142,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             public void afterTextChanged(Editable editable) {
             }
         });
-
       /*
       et1.addTextChangedListener(new TextWatcher() {
             @Override
@@ -183,7 +171,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getBaseContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        Log.e("p", result + "");
+        Log.d("p", result + "");
 
         // Setting the attributes of the search box
         searchBox.setThreshold(1);
@@ -266,9 +254,9 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 Log.i("OnClick", "inside the onclick of the adapter");
                 Intent i = new Intent(getContext(), BaseActivity.class);
                 i.putExtra("pagenumber", "2");
-                Log.e("OnClick", "internt set !! ");
+                Log.i("OnClick", "internt set !! ");
                 startActivity(i);
-                Log.e("OnClick", "finisherererer");
+                Log.i("OnClick", "finisherererer");
                 getActivity().finish();
             }
         });
@@ -290,7 +278,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 contact = new ArrayList<>();
             }
         }
-        Log.e("result", contactList + "");
+        Log.i("result", contactList + "");
         ContactListAdapter contactListAdapter = new ContactListAdapter(contactList, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
@@ -439,9 +427,9 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 Log.i("OnClick", "inside the onclick of the adapter");
                 Intent i = new Intent(getContext(), BaseActivity.class);
                 i.putExtra("pagenumber", "2");
-                Log.e("OnClick", "internt set !! ");
+                Log.d("OnClick", "internt set !! ");
                 startActivity(i);
-                Log.e("OnClick", "finisherererer");
+                Log.d("OnClick", "finisherererer");
                 getActivity().finish();
             }
         });
@@ -465,6 +453,14 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         // Animate the content view to 100% opacity, and clear any animation
         // listener set on the view.
         recList.animate().alpha(1).setDuration(mShortDurationTime);
+    }
+
+    private void removeDimLayout() {
+        dimLayout.setVisibility(View.GONE);
+        searchLayout.setVisibility(View.GONE);
+        searchBox.clearFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
     private class Task extends AsyncTask<Void, Void, String[]> {
