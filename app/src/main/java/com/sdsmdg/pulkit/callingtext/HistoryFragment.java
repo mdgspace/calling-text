@@ -1,10 +1,8 @@
 package com.sdsmdg.pulkit.callingtext;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.CallLog;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,10 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
 import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
@@ -107,7 +102,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.other_main_menu, menu);
     }
 
     @Override

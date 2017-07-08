@@ -1,6 +1,5 @@
 package com.sdsmdg.pulkit.callingtext;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -9,12 +8,9 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -36,15 +32,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
-
-import static com.sdsmdg.pulkit.callingtext.BaseActivity.getSavedContacts;
 
 public class ContactListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -315,7 +308,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.contact_list_main_menu, menu);
     }
 
     @Override
