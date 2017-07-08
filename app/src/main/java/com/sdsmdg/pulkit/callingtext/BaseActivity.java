@@ -8,25 +8,36 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
 
-
-public class BaseActivity extends FragmentActivity implements ActionBar.TabListener, GifFragment.onImageselectionListener {
-
+public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener,GifFragment.onImageselectionListener, ContactListFragment.OnContactsLoaded {
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
-    Button btn_settings;
+    public android.support.v7.app.ActionBar actionBar;
+    FragmentManager fragmentManager;
+    GifFragment fragment;
     public static String mName, mNumber;
     public static Boolean calledByapp = false;
+    public static List<ArrayList> savedContacts;
+    public static ArrayList<PhoneContact> savedPhoneContacts;
+    //session manager class
+    SessionManager session;
     private TabLayout tabLayout;
     public static int[] imageIds;
-    SessionManager session;  //session manager class
     public static String receiver = "7248187747";
 
     @Override
@@ -39,10 +50,21 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
         setListenersAndAdapters();
         setImageIds();
 
+        // To retain the contact list when the device is rotated
+        if (savedInstanceState != null){
+            savedPhoneContacts = savedInstanceState.getParcelableArrayList("phoneContactsList");
+            for(PhoneContact phoneContact : savedPhoneContacts){
+                ArrayList<String> a =new ArrayList<>();
+                a.add(phoneContact.name);
+                a.add(phoneContact.phone);
+                savedContacts.add(a);
+            }
+        }
+
         TelephonyManager telephoneManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = telephoneManager.getLine1Number();
         Log.e("MY BA NO.", "PHONE NO." + mPhoneNumber);
-
+      
         int pg_number = 0;
 
         if (getIntent().getExtras() != null) {
@@ -54,8 +76,6 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
             }
         }
         viewPager.setCurrentItem(pg_number);
-
-
 
         tabLayout.setupWithViewPager(viewPager);
         startService(new Intent(this, BackgroundService.class));
@@ -100,20 +120,23 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
 
+    @Override
+    public void saveContacts(List<ArrayList> contactsList, ArrayList<PhoneContact> phoneContacts) {
+        savedContacts = contactsList;
+        savedPhoneContacts = phoneContacts;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("phoneContactsList", savedPhoneContacts);
+    }
+
     /**
      * This function sets up adapters and click listeners
      */
     private void setListenersAndAdapters(){
-        btn_settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent settingsIntent = new Intent(BaseActivity.this, Settings.class);
-                startActivity(settingsIntent);
-            }
-        });
-
         viewPager.setAdapter(mAdapter);
-
     }
 
     /**
@@ -122,7 +145,6 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
     private void initVariables(){
         //session class instance
         session = new SessionManager(getApplicationContext());
-        btn_settings = (Button) findViewById(R.id.btn_settings);
         viewPager = (ViewPager) findViewById(R.id.pager);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -154,7 +176,6 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
         imageIds[18] = R.drawable.envy;
     }
 
-
     public static String getmName() {
         return mName;
     }
@@ -169,6 +190,14 @@ public class BaseActivity extends FragmentActivity implements ActionBar.TabListe
 
     public static void setmNumber(String mNumber) {
         BaseActivity.mNumber = mNumber;
+    }
+  
+    public static List<ArrayList> getSavedContacts() {
+        return savedContacts;
+    }
+
+    public static ArrayList<PhoneContact> getSavedPhoneContacts(){
+        return savedPhoneContacts;
     }
 
 }

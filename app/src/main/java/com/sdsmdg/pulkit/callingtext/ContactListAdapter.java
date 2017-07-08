@@ -11,6 +11,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +30,7 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
 
     public interface OnItemClickListener {
         public void onItemClick();
-
     }
-
-
 
     ContactListAdapter(List<ArrayList> contactList1, Activity activity, OnItemClickListener listener) {
         Log.e("pil", "in adapter");
@@ -35,7 +38,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
         parentAct = activity;
         this.listener = listener;
     }
-
 
     @Override
     public ContactListAdapter.ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -59,8 +61,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
 //                intent.putExtra("name",(String)contactList.get(position).get(0));
 //                intent.putExtra("number",(String)contactList.get(position).get(1));
 //                v.getContext().startActivity(intent);
-
-
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +71,7 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
                 BaseActivity.setmNumber(holder.phoneNumber.getText().toString());
                 Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getmName()+" "+BaseActivity.getmNumber());
 
+                Log.i("CLICK ", "OVER HERE BITCH!"+BaseActivity.getmName()+" "+BaseActivity.getmNumber());
             }
         });
 
@@ -98,8 +99,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
         protected TextView phoneNumber;
         protected ImageButton textsmsLogo;
 
-
-
         public ListViewHolder(final View vi) {
             super(vi);
             Log.e("pil", "in adapter");
@@ -110,8 +109,6 @@ class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ListVie
             textsmsLogo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                 }
             });
         }

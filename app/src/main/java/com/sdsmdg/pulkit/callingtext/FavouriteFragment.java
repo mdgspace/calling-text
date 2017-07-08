@@ -3,6 +3,7 @@ package com.sdsmdg.pulkit.callingtext;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +16,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -85,6 +89,12 @@ public class    FavouriteFragment extends Fragment{
                return view;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     private class Task extends AsyncTask<Void, Void, String[]> {
 
         @Override
@@ -131,5 +141,23 @@ public class    FavouriteFragment extends Fragment{
         mRecyclerView.setHasFixedSize(true);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.other_main_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.action_settings_icon:
+                Intent settingsActivityIntent = new Intent(getActivity(), Settings.class);
+                startActivity(settingsActivityIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 

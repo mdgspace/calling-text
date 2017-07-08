@@ -11,6 +11,8 @@ import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     private static final int CONTACTS_LOADER_ID = 1;
     private WindowManager windowManager;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -79,12 +82,15 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
 
             case R.id.button4:
-                if (haveNetworkConnection() == true) {
+                if (haveNetworkConnection()) {
                     if (editText2.getText().toString() != null && editText1.getText().toString() != null) {
+
                         BackGroundWorker b = new BackGroundWorker(getActivity(), 2);
                         Log.e("number", editText1.getText().toString());
+
                         b.execute(yourNumber, editText1.getText().toString(), editText2.getText().toString(), String.valueOf(gifNumber1));
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
+
                         BaseActivity.calledByapp = true;
                         callIntent.setData(Uri.parse("tel:" + editText1.getText().toString()));
                         Log.e("receiver", "tel:" + editText1.getText().toString());
@@ -97,7 +103,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                         DataBaseHandler dbh=DataBaseHandler.getInstance(getContext());
                         dbh.addCaller(cd);
                         startActivity(callIntent);
-                    } else {
+                    }else {
                         Log.e("in else", "in else");
                         Toast.makeText(getActivity(), "please type your message or number", Toast.LENGTH_SHORT).show();
                     }
@@ -137,7 +143,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
     }
 
     public void setImage(int gifNumber) {
@@ -163,16 +169,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         }
         return haveConnectedWifi || haveConnectedMobile;
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -212,5 +208,24 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 //        editName.setText(BaseActivity.getmName());
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.other_main_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case R.id.action_settings_icon:
+                Intent settingsActivityIntent = new Intent(getActivity(), Settings.class);
+                startActivity(settingsActivityIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
