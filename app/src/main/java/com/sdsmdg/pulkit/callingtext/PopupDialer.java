@@ -19,6 +19,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class PopupDialer extends AppCompatActivity implements GifFragment.onImageselectionListener {
 
+    private final String LOG_TAG = "PopupDialer";
     public static int gifNumber1 = 1;
     public static final String TAG = "POPUP";
     EditText ediTextMessage;
@@ -104,11 +105,11 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
                     final ComponentName component = new ComponentName(getBaseContext(), CallManager.class);
                     int status = getBaseContext().getPackageManager().getComponentEnabledSetting(component);
                     if (status == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
-                        Log.e("POPOp", "receiver is enabled");
+                        Log.i(LOG_TAG, "receiver is enabled");
                     } else if (status == PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                        Log.e("POPop", "receiver is disabled");
+                        Log.i(LOG_TAG, "receiver is disabled");
                     } else {
-                        Log.e("POPop", "receiver is nooooone");
+                        Log.i(LOG_TAG, "receiver is none");
 
                     }
                     //to disable
@@ -123,7 +124,7 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
                             startActivity(callIntent);
 
                         } catch (SecurityException s) {
-                            Log.e("exception", s.toString());
+                            s.printStackTrace();
                         }
                     } else {
                         Toast.makeText(PopupDialer.this, "please type your message or number", Toast.LENGTH_SHORT).show();
@@ -148,7 +149,7 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
                     finish();
 
                 }
-                Log.e("call", "call");
+                Log.i(LOG_TAG, "call");
             }
         });
 
