@@ -21,8 +21,9 @@ public class Splashactivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splashactivity);
+       // setContentView(R.layout.activity_splashactivity);
         //session class instance
         session = new SessionManager(getApplicationContext());
 
@@ -31,11 +32,6 @@ public class Splashactivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
         } else {
-
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
                             // your code here
                            if(session.isLoggedIn()){
                                Intent i = new Intent(Splashactivity.this, BaseActivity.class);
@@ -48,11 +44,6 @@ public class Splashactivity extends AppCompatActivity {
                                startActivity(loginActivityIntent);
                                finish();
                            }
-                        }
-                    },
-                    1000
-            );
-
 
         }
 
