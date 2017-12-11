@@ -58,7 +58,10 @@
                 <data android:scheme="tel" />
             </intent-filter>
         </activity>
-        <activity android:name=".Splashactivity">
+        <activity
+            android:name=".Splashactivity"
+            android:theme="@style/bgImage"
+                >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
