@@ -1,11 +1,9 @@
 package com.sdsmdg.pulkit.callingtext;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -14,15 +12,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +35,16 @@ public class    FavouriteFragment extends Fragment{
     private RecyclerView mRecyclerView;
     private FavouriteAdapter mAdapter;
     private View view;
-    private List<ArrayList>  favList;
+    private List<FavContact> favList;
     private FloatingActionButton mFavFab;
     private EditText editText;
     private String nameAddFav;
     private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
+    AutoCompleteTextView searchBox;
+    FrameLayout dimLayoutfav;
+    LinearLayout searchLayoutfav;
+    private ImageView backButtonfav;
+
 
     @Nullable
 
@@ -45,7 +52,15 @@ public class    FavouriteFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view=inflater.inflate(R.layout.fragment_favourites,container,false);
+        favList=createFavouriteList();
+        FavAdapter adapter = new FavAdapter(getContext(), favList);
+        searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchboxfav);
+        searchBox.setAdapter(adapter);
+
         mFavFab=(FloatingActionButton) view.findViewById(R.id.favoriteFab);
+        dimLayoutfav = (FrameLayout) view.findViewById(R.id.dim_layoutfav);
+        searchLayoutfav = (LinearLayout) view.findViewById(R.id.searchbarfav);
+        backButtonfav = (ImageView) view.findViewById(R.id.backbuttonfav);
         editText = (EditText)view.findViewById(R.id.favAddName);
         mWaveSwipeRefreshLayout= (WaveSwipeRefreshLayout) view.findViewById(R.id.main_swipe);
         mFavFab.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +101,24 @@ public class    FavouriteFragment extends Fragment{
                 new FavouriteFragment.Task().execute();
             }
         });
-               return view;
+
+        // Back button to request the focus back to the ContactsListFragment
+        backButtonfav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeDimLayout();
+            }
+        });
+
+        // Dim layout which is present during search operations
+        dimLayoutfav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeDimLayout();
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -94,6 +126,17 @@ public class    FavouriteFragment extends Fragment{
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
+
+
+    private void removeDimLayout() {
+        dimLayoutfav.setVisibility(View.GONE);
+        searchLayoutfav.setVisibility(View.GONE);
+        searchBox.clearFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+    }
+
 
     private class Task extends AsyncTask<Void, Void, String[]> {
 
@@ -116,17 +159,18 @@ public class    FavouriteFragment extends Fragment{
 
     /* This method generates the list of favourite contacts, this list changes with changes in default contact apps*/
 
-    public List<ArrayList> createFavouriteList(){
-        favList= new ArrayList<>();
-        ArrayList<String> arrayList=new ArrayList<>();
+    public List<FavContact> createFavouriteList(){
+        favList= new ArrayList<FavContact>();
+       // ArrayList<String> arrayList=new ArrayList<>();
+        FavContact contact = new FavContact();
         Cursor favPhones= getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, "starred=?", new String[]{"1"}, null);
         while (favPhones.moveToNext()){
             String name = favPhones.getString(favPhones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String number = favPhones.getString(favPhones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            arrayList.add(name);
-            arrayList.add(number);
-            favList.add(arrayList);
-            arrayList =new ArrayList<>();
+            contact.setName(name);
+            contact.setNumber(number);
+            favList.add(contact);
+            contact =new FavContact();
         }
         favPhones.close();
         return favList;
@@ -144,7 +188,7 @@ public class    FavouriteFragment extends Fragment{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.other_main_menu, menu);
+        inflater.inflate(R.menu.contact_list_main_menu, menu);
     }
 
     @Override
@@ -156,6 +200,16 @@ public class    FavouriteFragment extends Fragment{
                 Intent settingsActivityIntent = new Intent(getActivity(), Settings.class);
                 startActivity(settingsActivityIntent);
                 return true;
+
+            case R.id.action_search_icon:
+                dimLayoutfav.setVisibility(View.VISIBLE);
+                searchLayoutfav.setVisibility(View.VISIBLE);
+                InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+                searchBox.requestFocus();
+                searchBox.showDropDown();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

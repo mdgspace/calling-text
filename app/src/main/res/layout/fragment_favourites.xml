@@ -2,16 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="#000000"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     tools:context="com.sdsmdg.pulkit.callingtext.FavouriteFragment">
+
     <jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/main_swipe">
-    <android.support.v7.widget.RecyclerView
+
+        <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/favRecyclerView"/>
+        android:id="@+id/favRecyclerView"
+        android:overScrollMode="always"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="34dp"/>
 
     </jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout>
     <EditText
@@ -36,4 +42,52 @@
         android:id="@+id/favoriteFab"
         android:layout_marginBottom="10dp"
         android:src="@drawable/ic_plus"/>
+
+
+    <!-- Layout tomake the screen dim during search operations !-->
+    <FrameLayout
+        android:id="@+id/dim_layoutfav"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:foreground="@color/black_transparent"
+        android:visibility="gone"/>
+
+    <!-- Layout for Searching Contacts !-->
+    <LinearLayout
+        android:id="@+id/searchbarfav"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/round_corners"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/backbuttonfav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_arrow_back_black_24dp" />
+
+        <AutoCompleteTextView
+            android:id="@+id/searchboxfav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:hint="Search Favourites"
+            android:imeActionLabel="Search"
+            android:imeOptions="actionNone"
+            android:inputType="textAutoComplete"
+            android:textColorHint="#A1A1A1"
+            android:textSize="16sp" />
+    </LinearLayout>
 </RelativeLayout>

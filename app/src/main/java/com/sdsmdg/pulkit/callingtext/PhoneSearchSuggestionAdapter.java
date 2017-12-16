@@ -30,7 +30,6 @@ public class PhoneSearchSuggestionAdapter extends ArrayAdapter<PhoneContact> {
     private final ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#be5e00"));
 
     public PhoneSearchSuggestionAdapter(Context context, int resource, ArrayList<PhoneContact> phoneContacts) {
-
         super(context, resource);
         this.suggestions = new ArrayList<>();
         this.phoneContacts = phoneContacts;

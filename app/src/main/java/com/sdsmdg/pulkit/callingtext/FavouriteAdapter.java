@@ -3,7 +3,6 @@ package com.sdsmdg.pulkit.callingtext;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -11,41 +10,41 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.GridItemViewHolder> {
 
     private Context context;
-    private List<ArrayList> mItemList;
+    public List<FavContact> mItemList;
     private String mName, mNumber;
 
 
-    public FavouriteAdapter(Context context, List<ArrayList> list){
+    public FavouriteAdapter(Context context, List<FavContact> list){
         this.context=context;
         mItemList=list;
     }
     @Override
     public GridItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.card_favourite, parent, false);
-        return new GridItemViewHolder(itemView, this);
+               return new GridItemViewHolder(itemView, this);
     }
+
 
     @Override
     public void onBindViewHolder(final GridItemViewHolder holder, int position) {
 
-        mName= (String) mItemList.get(position).get(0);
-        mNumber= (String) mItemList.get(position).get(1);
-        holder.tvName.setText((String) mItemList.get(position).get(0));
+       mName=  mItemList.get(position).getName();
+       mNumber= mItemList.get(position).getNumber();
+
+
+        holder.tvName.setText( mItemList.get(position).getName());
 
         /*Generates a random color everytime the view is bound to the viewholder, also gives the icon for the first letter of the name*/
-        holder.imageView.setText(mItemList.get(position).get(0).toString().substring(0,1));
+        holder.imageView.setText(mItemList.get(position).getName().toString().substring(0,1));
 
         holder.buttonViewOption.setOnClickListener(new View.OnClickListener() {
             @Override

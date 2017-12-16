@@ -116,7 +116,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
         });
 
-        // Dim layout which is present during search operattions
+        // Dim layout which is present during search operations
         dimLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
