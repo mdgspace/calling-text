@@ -1,5 +1,4 @@
 package com.sdsmdg.pulkit.callingtext;
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class FavAdapter extends ArrayAdapter<FavContact> {
 
     private final List<FavContact> names ;
@@ -44,9 +42,9 @@ public class FavAdapter extends ArrayAdapter<FavContact> {
 
         TextView tvName = (TextView) convertView.findViewById(R.id.list_item_favname);
         TextView tvNumber = (TextView) convertView.findViewById(R.id.list_item_favphone);
+
         tvName.setText(name.getName());
         tvNumber.setText(name.getNumber());
-
         return convertView;
     }
 }

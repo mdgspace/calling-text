@@ -45,7 +45,6 @@ public class    FavouriteFragment extends Fragment{
     LinearLayout searchLayoutfav;
     private ImageView backButtonfav;
 
-
     @Nullable
 
     @Override
@@ -56,6 +55,7 @@ public class    FavouriteFragment extends Fragment{
         FavAdapter adapter = new FavAdapter(getContext(), favList);
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchboxfav);
         searchBox.setAdapter(adapter);
+        searchBox.setThreshold(1);
 
         mFavFab=(FloatingActionButton) view.findViewById(R.id.favoriteFab);
         dimLayoutfav = (FrameLayout) view.findViewById(R.id.dim_layoutfav);
@@ -82,7 +82,7 @@ public class    FavouriteFragment extends Fragment{
                 }
                 else {
                     editText.setText("");
-                    mFavFab.setImageResource(R.drawable.red_tick);
+                    mFavFab.setImageResource(R.drawable.tick1);
                     editText.setVisibility(View.VISIBLE);
                 }
 
@@ -137,7 +137,6 @@ public class    FavouriteFragment extends Fragment{
         inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
-
     private class Task extends AsyncTask<Void, Void, String[]> {
 
         @Override
@@ -164,6 +163,7 @@ public class    FavouriteFragment extends Fragment{
        // ArrayList<String> arrayList=new ArrayList<>();
         FavContact contact = new FavContact();
         Cursor favPhones= getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, "starred=?", new String[]{"1"}, null);
+
         while (favPhones.moveToNext()){
             String name = favPhones.getString(favPhones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String number = favPhones.getString(favPhones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -172,6 +172,7 @@ public class    FavouriteFragment extends Fragment{
             favList.add(contact);
             contact =new FavContact();
         }
+
         favPhones.close();
         return favList;
     }

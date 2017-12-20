@@ -1,3 +1,4 @@
+/*
 package com.sdsmdg.pulkit.callingtext;
 
 import android.content.Intent;
@@ -11,12 +12,10 @@ import android.util.Log;
 import android.widget.Toast;
 import android.Manifest;
 
-
 public class Splashactivity extends AppCompatActivity {
 
     int PERMISSIONS_REQUEST_CODE = 1;
     SessionManager session;
-
 
 
     @Override
@@ -104,3 +103,5 @@ public class Splashactivity extends AppCompatActivity {
     }
 
 }
+
+*/

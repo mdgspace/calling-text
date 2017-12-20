@@ -1,12 +1,17 @@
 package com.sdsmdg.pulkit.callingtext;
 
+import android.*;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -25,6 +30,8 @@ import java.util.HashMap;
 
 public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener,GifFragment.onImageselectionListener, ContactListFragment.OnContactsLoaded {
 
+    int PERMISSIONS_REQUEST_CODE = 1;
+
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     public android.support.v7.app.ActionBar actionBar;
@@ -42,11 +49,42 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base);
-        //to initialise all the global variables
+        //setContentView(R.layout.activity_base);
         initVariables();
-        session.checkLogIn();//check login session
+
+        Log.e("Splash","INININ");
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermissions();
+        }
+        else{
+            session.checkLogIn();
+        }
+
+        setContentView(R.layout.activity_base);
+
+       /*
+        else {
+            // your code here
+            if(session.isLoggedIn()){
+               // Intent i = new Intent(Splashactivity.this, BaseActivity.class);
+
+                startActivity(getIntent());
+                finish();
+            }
+            else{
+                Intent loginActivityIntent = new Intent(BaseActivity.this, LoginActivity.class);
+                startActivity(loginActivityIntent);
+                finish();
+            }
+
+        }
+    */
+
+        //to initialise all the global variables
+        //initVariables();
+       // session.checkLogIn();//check login session
         setListenersAndAdapters();
         setImageIds();
 
@@ -64,7 +102,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         TelephonyManager telephoneManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber = telephoneManager.getLine1Number();
         Log.e("MY BA NO.", "PHONE NO." + mPhoneNumber);
-      
+
         int pg_number = 0;
 
         if (getIntent().getExtras() != null) {
@@ -81,6 +119,46 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         startService(new Intent(this, BackgroundService.class));
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        boolean allGranted = true;
+
+        if (grantResults.length > 0) {
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+        }
+        if (allGranted) {
+            session.checkLogIn();//check login session
+        } else {
+            Toast.makeText(this, "Please grant the requested permissions.", Toast.LENGTH_SHORT).show();
+            session.checkLogIn();//check login session
+        }
+    }
+
+
+    /*
+    public void startHomeActivity() {
+        if(session.isLoggedIn()){
+            // Intent i = new Intent(Splashactivity.this, BaseActivity.class);
+
+            //startActivity(getIntent());
+            //finish();
+        }
+        else{
+            Intent loginActivityIntent = new Intent(BaseActivity.this, LoginActivity.class);
+            startActivity(loginActivityIntent);
+            finish();
+        }
+    }
+    */
+
+
     private void call(String s) {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + s));
@@ -90,6 +168,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
             Toast.makeText(BaseActivity.this, "yourActivity is not found", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -126,6 +205,24 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         savedPhoneContacts = phoneContacts;
     }
 
+    public void requestPermissions() {
+        String[] permissions = {
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_NETWORK_STATE,
+                android.Manifest.permission.RECEIVE_SMS,
+                android.Manifest.permission.READ_SMS,
+                android.Manifest.permission.SEND_SMS,
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.CALL_PHONE,
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.SYSTEM_ALERT_WINDOW,
+                android.Manifest.permission.PROCESS_OUTGOING_CALLS
+
+        };
+        ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_CODE);
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -144,8 +241,9 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
      */
     private void initVariables(){
         //session class instance
-        session = new SessionManager(getApplicationContext());
+        session = new SessionManager(this);
         viewPager = (ViewPager) findViewById(R.id.pager);
+
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         tabLayout = (TabLayout) findViewById(R.id.tabs);
     }
