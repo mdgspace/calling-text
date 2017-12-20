@@ -53,10 +53,10 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     AutoCompleteTextView searchBox;
     FrameLayout dimLayout;
     LinearLayout searchLayout;
-    ArrayList<PhoneContact> phoneContactsList;
+    static ArrayList<PhoneContact> phoneContactsList;
     PhoneSearchSuggestionAdapter adapter;
     Toolbar toolbar;
-    ProgressDialog mProgress;
+     ProgressDialog mProgress;
     ScaleInAnimationAdapter alphaAdapter;
     OnContactsLoaded onContactsLoaded;
     ContactListAdapter ca;
@@ -327,6 +327,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         protected void onPreExecute() {
             super.onPreExecute();
             mProgress.show();
+            mProgress.dismiss();
         }
 
         @Override

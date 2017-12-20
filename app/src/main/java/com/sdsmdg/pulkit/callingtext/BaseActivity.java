@@ -24,11 +24,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 
-public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener,GifFragment.onImageselectionListener, ContactListFragment.OnContactsLoaded {
+public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener, GifFragment.onImageselectionListener, ContactListFragment.OnContactsLoaded {
 
     int PERMISSIONS_REQUEST_CODE = 1;
 
@@ -51,18 +52,17 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_base);
+        setContentView(R.layout.activity_base);
         initVariables();
 
-        Log.e("Splash","INININ");
+        Log.e("Splash", "INININ");
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
-        }
-        else{
+        } else {
             session.checkLogIn();
         }
 
-        setContentView(R.layout.activity_base);
+        // setContentView(R.layout.activity_base);
 
        /*
         else {
@@ -84,15 +84,15 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
 
         //to initialise all the global variables
         //initVariables();
-       // session.checkLogIn();//check login session
+        // session.checkLogIn();//check login session
         setListenersAndAdapters();
         setImageIds();
 
         // To retain the contact list when the device is rotated
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             savedPhoneContacts = savedInstanceState.getParcelableArrayList("phoneContactsList");
-            for(PhoneContact phoneContact : savedPhoneContacts){
-                ArrayList<String> a =new ArrayList<>();
+            for (PhoneContact phoneContact : savedPhoneContacts) {
+                ArrayList<String> a = new ArrayList<>();
                 a.add(phoneContact.name);
                 a.add(phoneContact.phone);
                 savedContacts.add(a);
@@ -100,6 +100,16 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         }
 
         TelephonyManager telephoneManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         String mPhoneNumber = telephoneManager.getLine1Number();
         Log.e("MY BA NO.", "PHONE NO." + mPhoneNumber);
 
@@ -214,6 +224,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
                 android.Manifest.permission.SEND_SMS,
                 android.Manifest.permission.READ_PHONE_STATE,
                 android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.WRITE_CONTACTS,
                 android.Manifest.permission.CALL_PHONE,
                 android.Manifest.permission.READ_PHONE_STATE,
                 android.Manifest.permission.SYSTEM_ALERT_WINDOW,
