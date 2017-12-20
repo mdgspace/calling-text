@@ -1,7 +1,5 @@
 package com.sdsmdg.pulkit.callingtext;
 
-
-
 public class FavContact {
     String name, number;
 
@@ -15,10 +13,10 @@ public class FavContact {
 
     public String getName(){
         return name;
-    }
+    } //returns favourite contact's name
 
     public String getNumber(){
         return number;
-    }
+    } //returns favourite contact's number
 
 }

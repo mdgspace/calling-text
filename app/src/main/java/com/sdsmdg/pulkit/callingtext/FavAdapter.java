@@ -18,7 +18,7 @@ public class FavAdapter extends ArrayAdapter<FavContact> {
 
     public FavAdapter( Context context, List<FavContact> names) {
         super(context,0, names);
-        this.names = names;
+        this.names = names; //stores names of all the contacts marked as favourites
     }
 
     @Override
@@ -33,18 +33,22 @@ public class FavAdapter extends ArrayAdapter<FavContact> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item from filtered list.
+
+        // To get the data item from filtered list.
         FavContact name = filteredNames.get(position);
 
-        // Inflate your custom row layout as usual.
+        // To inflate the custom row layout for suggestion items.
         LayoutInflater inflater = LayoutInflater.from(getContext());
         convertView = inflater.inflate(R.layout.fav_suggestion_item, parent, false);
 
+        //Initializing the view objects for name and number
         TextView tvName = (TextView) convertView.findViewById(R.id.list_item_favname);
         TextView tvNumber = (TextView) convertView.findViewById(R.id.list_item_favphone);
 
+       //To display the name and number in the text fields of a row
         tvName.setText(name.getName());
         tvNumber.setText(name.getNumber());
         return convertView;
+
     }
 }

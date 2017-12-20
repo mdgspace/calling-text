@@ -13,7 +13,7 @@ public class FavNamesFilter extends Filter {
     public FavNamesFilter(FavAdapter adapter, List<FavContact> originalList) {
         super();
         this.adapter = adapter;
-        this.originalList = originalList;
+        this.originalList = originalList; //contains list of contacts added by the user as favourites
         this.filteredList = new ArrayList<>();
     }
 
@@ -27,7 +27,7 @@ public class FavNamesFilter extends Filter {
         } else {
             final String filterPattern = constraint.toString().toLowerCase().trim();
 
-            // Your filtering logic goes in here
+            // filtering logic
             for (final FavContact name : originalList) {
                 if (name.getName().toLowerCase().contains(filterPattern)) {
                     filteredList.add(name);

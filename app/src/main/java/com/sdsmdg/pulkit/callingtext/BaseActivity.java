@@ -1,6 +1,5 @@
 package com.sdsmdg.pulkit.callingtext;
 
-import android.*;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -12,22 +11,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 
 public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener, GifFragment.onImageselectionListener, ContactListFragment.OnContactsLoaded {
 
@@ -53,6 +44,8 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+
+        //to initialise all the global variables
         initVariables();
 
         Log.e("Splash", "INININ");
@@ -62,29 +55,6 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
             session.checkLogIn();
         }
 
-        // setContentView(R.layout.activity_base);
-
-       /*
-        else {
-            // your code here
-            if(session.isLoggedIn()){
-               // Intent i = new Intent(Splashactivity.this, BaseActivity.class);
-
-                startActivity(getIntent());
-                finish();
-            }
-            else{
-                Intent loginActivityIntent = new Intent(BaseActivity.this, LoginActivity.class);
-                startActivity(loginActivityIntent);
-                finish();
-            }
-
-        }
-    */
-
-        //to initialise all the global variables
-        //initVariables();
-        // session.checkLogIn();//check login session
         setListenersAndAdapters();
         setImageIds();
 
@@ -99,7 +69,10 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
             }
         }
 
+
         TelephonyManager telephoneManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+
+        //to check if permission for call is available
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -151,28 +124,21 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         }
     }
 
-
-    /*
-    public void startHomeActivity() {
-        if(session.isLoggedIn()){
-            // Intent i = new Intent(Splashactivity.this, BaseActivity.class);
-
-            //startActivity(getIntent());
-            //finish();
-        }
-        else{
-            Intent loginActivityIntent = new Intent(BaseActivity.this, LoginActivity.class);
-            startActivity(loginActivityIntent);
-            finish();
-        }
-    }
-    */
-
-
     private void call(String s) {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + s));
         try {
+            //to check if permission for call is available
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             startActivity(callIntent);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(BaseActivity.this, "yourActivity is not found", Toast.LENGTH_SHORT).show();
@@ -215,6 +181,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         savedPhoneContacts = phoneContacts;
     }
 
+   //this function asks for certain permissions from the user
     public void requestPermissions() {
         String[] permissions = {
                 android.Manifest.permission.INTERNET,

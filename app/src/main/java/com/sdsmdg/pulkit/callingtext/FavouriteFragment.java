@@ -51,11 +51,12 @@ public class    FavouriteFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view=inflater.inflate(R.layout.fragment_favourites,container,false);
-        favList=createFavouriteList();
+        favList=createFavouriteList(); //to store all the contacts marked as favourites.
         FavAdapter adapter = new FavAdapter(getContext(), favList);
+
         searchBox = (AutoCompleteTextView) view.findViewById(R.id.searchboxfav);
         searchBox.setAdapter(adapter);
-        searchBox.setThreshold(1);
+        searchBox.setThreshold(1); //to show the search suggestions when the user has entered 1 character in the search bar
 
         mFavFab=(FloatingActionButton) view.findViewById(R.id.favoriteFab);
         dimLayoutfav = (FrameLayout) view.findViewById(R.id.dim_layoutfav);

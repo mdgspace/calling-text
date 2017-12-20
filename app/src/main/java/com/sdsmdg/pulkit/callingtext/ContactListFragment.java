@@ -336,6 +336,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             return contactsList;
         }
 
+
         private List<ArrayList> createList() {
             phoneContactsList = new ArrayList<PhoneContact>();
             PhoneContact phoneContact ;
