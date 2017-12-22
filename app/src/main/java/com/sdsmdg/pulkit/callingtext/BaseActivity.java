@@ -20,7 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener, GifFragment.onImageselectionListener, ContactListFragment.OnContactsLoaded {
+public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener, GifModel.onImageselectionListener, ContactListFragment.OnContactsLoaded {
 
     int PERMISSIONS_REQUEST_CODE = 1;
 
@@ -28,7 +28,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     private TabsPagerAdapter mAdapter;
     public android.support.v7.app.ActionBar actionBar;
     FragmentManager fragmentManager;
-    GifFragment fragment;
+    GifModel fragment;
     public static String mName, mNumber;
     public static Boolean calledByapp = false;
     public static List<ArrayList> savedContacts;
@@ -174,6 +174,8 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
             newFragment.setImage(Integer.parseInt(position));
         }
     }
+
+
 
     @Override
     public void saveContacts(List<ArrayList> contactsList, ArrayList<PhoneContact> phoneContacts) {

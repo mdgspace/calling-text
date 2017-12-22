@@ -1,8 +1,10 @@
+/*
 package com.sdsmdg.pulkit.callingtext;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,3 +81,4 @@ public class GifFragment extends DialogFragment implements View.OnClickListener 
         getActivity().onBackPressed();
     }
 }
+*/

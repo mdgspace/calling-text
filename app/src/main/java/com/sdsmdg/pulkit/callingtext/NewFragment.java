@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,10 +42,9 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     Boolean press = false;
     android.support.v4.app.FragmentManager fragmentManager;
     TextView t1;
-    GifFragment fragment;
     View view;
     Button call;
-    public static int gifNumber1;
+   public static int gifNumber1;
     private static final int CONTACTS_LOADER_ID = 1;
     private WindowManager windowManager;
 
@@ -69,6 +69,26 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         fl2 = (FrameLayout) view.findViewById(R.id.bottom);
         rl = (RelativeLayout) view.findViewById(R.id.my_layout);
         img.setOnClickListener(this);
+
+        /*
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BottomSheetDialogFragment bottomSheetDialogFragment = new GifModel();
+                bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+
+                GifFragment gifFragment = new GifFragment();
+                fl.setAlpha(0.5f);
+                call.setVisibility(View.INVISIBLE);
+                gifFragment.getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.bottom, gifFragment, null)
+                        .addToBackStack(null)
+                        .commit();
+                press = !press;
+            }
+        });
+        */
+
         call = (Button) view.findViewById(R.id.button4);
         call.setText("CALL");
         call.setOnClickListener(this);
@@ -112,16 +132,20 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                 Log.e("call", "call");
 
                 break;
-            case R.id.imageView3:
-                GifFragment gifFragment = new GifFragment();
+
+                case R.id.imageView3:
+                    BottomSheetDialogFragment bottomSheetDialogFragment = new GifModel();
+                    bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
 //                if (press) {
-                    fl.setAlpha(0.5f);
+                  //  fl.setAlpha(0.5f);
                     call.setVisibility(View.INVISIBLE);
+
                     this.getFragmentManager().beginTransaction()
-                            .replace(R.id.bottom, gifFragment, null)
+                            //.replace(R.id.bottom, bottomSheetDialogFragment, null)
                             .addToBackStack(null)
                             .commit();
                     press = !press;
+
 //                } else {
 //                    fl.setAlpha(0);
 //                    this.getFragmentManager().beginTransaction()
@@ -133,6 +157,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
 
                 break;
+
             default:
                 break;
 
@@ -148,7 +173,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
     public void setImage(int gifNumber) {
         fl.setAlpha(0);
-        gifNumber1 = gifNumber;
+       gifNumber1 = gifNumber;
         img.setImageResource(BaseActivity.imageIds[gifNumber1-1]);
         call.setVisibility(View.VISIBLE);
     }

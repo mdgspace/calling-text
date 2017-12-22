@@ -4,7 +4,12 @@ package com.sdsmdg.pulkit.callingtext;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
+
+
 public class TabsPagerAdapter extends FragmentPagerAdapter {
+
+    View view;
 
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);

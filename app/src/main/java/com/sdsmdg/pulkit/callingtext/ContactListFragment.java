@@ -1,6 +1,7 @@
 package com.sdsmdg.pulkit.callingtext;
 
 import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -43,11 +45,14 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
 
     public RecyclerView recList;
+    ViewGroup contain;
+    TabLayout tab;
+    LayoutInflater Inflater;
     public ImageButton button1;
     Button button;
     EditText et1;
     static List<ArrayList> result;
-    View view;
+    View view,view1;
     WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private ImageView searchButton, settingsButton, backButton;
     AutoCompleteTextView searchBox;
@@ -310,6 +315,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 manager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
                 searchBox.requestFocus();
                 searchBox.showDropDown();
+/*
+                view1 = Inflater.inflate(R.layout.content_base, contain);
+                tab = (TabLayout) view1.findViewById(R.id.tabs);
+                tab.setVisibility(View.INVISIBLE);
+*/
                 return true;
 
             case R.id.action_settings_icon:
