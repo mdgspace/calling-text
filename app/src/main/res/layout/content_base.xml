@@ -12,11 +12,13 @@
         android:background="#388FF5"
         app:tabSelectedTextColor="@color/white"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:animateLayoutChanges="true"
+        app:layout_scrollFlags="scroll|enterAlways"/>
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#9948f9"
-        android:layout_below="@+id/tabs"/>
+        android:layout_below="@+id/tabs" />
 </RelativeLayout>

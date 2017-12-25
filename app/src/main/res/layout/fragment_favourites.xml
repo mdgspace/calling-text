@@ -24,14 +24,14 @@
         android:layout_width="300dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp"
-        android:hint="Name here"
-        android:background="#AAA19F"
+        android:layout_marginBottom="18dp"
+        android:hint="  Name here"
+        android:background="#66A3FF"
         android:id="@+id/favAddName"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:visibility="invisible"
-        android:textColorHint="#000000"
-        android:layout_height="30dp"
+        android:textColorHint="#D9D9D9"
+        android:layout_height="40dp"
         />
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -39,6 +39,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="10dp"
+        app:elevation="10dp"
         android:id="@+id/favoriteFab"
         android:layout_marginBottom="10dp"
         android:src="@drawable/ic_plus"/>

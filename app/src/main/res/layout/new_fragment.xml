@@ -87,13 +87,15 @@
         android:layout_below="@+id/input_layout_password2"
         android:layout_toStartOf="@+id/imageView3" />
 
-
+<!--
     <FrameLayout
         android:layout_marginLeft="25dp"
         android:layout_width="320dp"
         android:layout_height="400dp"
+        android:background="#FF0000"
         android:id="@+id/bottom"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/input_layout_password">
     </FrameLayout>
+    !-->
 </RelativeLayout>

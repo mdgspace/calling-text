@@ -3,7 +3,10 @@ package com.sdsmdg.pulkit.callingtext;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.CoordinatorLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,21 +37,23 @@ public class GifModel extends BottomSheetDialogFragment implements View.OnClickL
     ImageButton img20;
 
     GifModel.onImageselectionListener mCallback;
+
     @Override
     public void setupDialog(final Dialog dialog, int style) {
         super.setupDialog(dialog, style);
         View contentView = View.inflate(getContext(), R.layout.gif_fragment, null);
-        dialog.setContentView(contentView);
+       dialog.setContentView(contentView);
+        //((View) contentView.getParent()).setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
 
     public interface onImageselectionListener {
         public void onImageSelection(String position);
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme);
     }
 
     @Override
@@ -95,7 +100,6 @@ public class GifModel extends BottomSheetDialogFragment implements View.OnClickL
         img18.setOnClickListener(this);
         img19.setOnClickListener(this);
         img20.setOnClickListener(this);
-
 
         return view;
     }

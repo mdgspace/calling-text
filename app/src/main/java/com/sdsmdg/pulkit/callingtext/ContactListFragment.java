@@ -46,8 +46,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
     public RecyclerView recList;
     ViewGroup contain;
-    TabLayout tab;
-    LayoutInflater Inflater;
     public ImageButton button1;
     Button button;
     EditText et1;
@@ -73,6 +71,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         setHasOptionsMenu(true);
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -89,7 +88,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.activity_contact_list, container, false);
-
         // init views
         button1 = (ImageButton) view.findViewById(R.id.imageButton21);
         recList = (RecyclerView) view.findViewById(R.id.questionList_recycler);
@@ -196,6 +194,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 new Task().execute();
             }
         });
+
         return view;
     }
 
@@ -311,15 +310,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             case R.id.action_search_icon:
                 dimLayout.setVisibility(View.VISIBLE);
                 searchLayout.setVisibility(View.VISIBLE);
+                searchLayout.bringToFront();
                 InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
                 searchBox.requestFocus();
                 searchBox.showDropDown();
-/*
-                view1 = Inflater.inflate(R.layout.content_base, contain);
-                tab = (TabLayout) view1.findViewById(R.id.tabs);
-                tab.setVisibility(View.INVISIBLE);
-*/
                 return true;
 
             case R.id.action_settings_icon:

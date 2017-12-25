@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -51,12 +52,10 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // setSupportActionBar(toolbar);
+
         View view = inflater.inflate(R.layout.new_fragment, container, false);
         editText1 = (EditText) view.findViewById(R.id.editText2); //number
         editText2 = (EditText) view.findViewById(R.id.editText);//message
-//        editName = (EditText) view.findViewById(R.id.editText3); //name
         yourNumber = "7248187747";
         t1 = (TextView) view.findViewById(R.id.textView5);
         img = (GifImageView) view.findViewById(R.id.imageView3);
@@ -70,24 +69,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         rl = (RelativeLayout) view.findViewById(R.id.my_layout);
         img.setOnClickListener(this);
 
-        /*
-        img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BottomSheetDialogFragment bottomSheetDialogFragment = new GifModel();
-                bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
-
-                GifFragment gifFragment = new GifFragment();
-                fl.setAlpha(0.5f);
-                call.setVisibility(View.INVISIBLE);
-                gifFragment.getActivity().getFragmentManager().beginTransaction()
-                        .replace(R.id.bottom, gifFragment, null)
-                        .addToBackStack(null)
-                        .commit();
-                press = !press;
-            }
-        });
-        */
 
         call = (Button) view.findViewById(R.id.button4);
         call.setText("CALL");
@@ -141,20 +122,9 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                     call.setVisibility(View.INVISIBLE);
 
                     this.getFragmentManager().beginTransaction()
-                            //.replace(R.id.bottom, bottomSheetDialogFragment, null)
                             .addToBackStack(null)
                             .commit();
                     press = !press;
-
-//                } else {
-//                    fl.setAlpha(0);
-//                    this.getFragmentManager().beginTransaction()
-//                            .detach(gifFragment)
-//                            .addToBackStack(null)
-//                            .commit();
-//                    press = !press;
-//                }
-
 
                 break;
 
@@ -230,8 +200,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.i("NewFragment", "Attached");
-//        editName.setText(BaseActivity.getmName());
-
 
     }
 

@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     public static ArrayList<PhoneContact> savedPhoneContacts;
     //session manager class
     SessionManager session;
-    private TabLayout tabLayout;
+    public static TabLayout tabLayout;
     public static int[] imageIds;
     public static String receiver = "7248187747";
 
@@ -277,5 +278,6 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     public static ArrayList<PhoneContact> getSavedPhoneContacts(){
         return savedPhoneContacts;
     }
+
 
 }

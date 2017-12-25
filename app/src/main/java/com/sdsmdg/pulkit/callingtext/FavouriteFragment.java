@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -44,6 +45,7 @@ public class    FavouriteFragment extends Fragment{
     FrameLayout dimLayoutfav;
     LinearLayout searchLayoutfav;
     private ImageView backButtonfav;
+    int color = Color.parseColor("#000080");
 
     @Nullable
 
@@ -89,6 +91,7 @@ public class    FavouriteFragment extends Fragment{
 
             }
         });
+        mFavFab.setRippleColor(color);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.favRecyclerView);
         addToList();
