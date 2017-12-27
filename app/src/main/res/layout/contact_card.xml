@@ -10,7 +10,6 @@
     android:background="#ffffff"
     android:transitionName="qwerty2">
 
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -18,10 +17,27 @@
         android:src="@drawable/con1"
         android:layout_marginLeft="14dp"
         android:layout_marginStart="18dp"
+        android:layout_marginTop="2dp"
         android:layout_marginRight="18dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+<LinearLayout
+    android:layout_width="360dp"
+    android:layout_height="100dp"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:textSize="17dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/textView6"
+        android:layout_marginLeft="50dp"
+        android:layout_alignTop="@+id/imageButton21"
+        android:layout_toEndOf="@+id/imageView4"
+        android:layout_marginStart="50dp" />
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,31 +45,25 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/textView7"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="50dp"
         android:textSize="15dp"
         android:layout_below="@+id/textView6"
         android:layout_alignStart="@+id/textView6" />
+
+   </LinearLayout>
 
     <ImageButton
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/imageButton21"
+        android:layout_marginBottom="25dp"
         android:src="@drawable/call3"
         android:background="#ffffff"
-        android:layout_marginRight="25dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginEnd="18dp"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:textSize="17dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/textView6"
-        android:layout_marginLeft="66dp"
-        android:layout_alignTop="@+id/imageButton21"
-        android:layout_toEndOf="@+id/imageView4"
-        android:layout_marginStart="16dp" />
 
 </RelativeLayout>

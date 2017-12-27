@@ -19,9 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +47,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     android.support.v4.app.FragmentManager fragmentManager;
     TextView t1;
     View view;
-    Button call;
+    ImageButton call;
    public static int gifNumber1;
     private static final int CONTACTS_LOADER_ID = 1;
     private WindowManager windowManager;
@@ -70,10 +73,10 @@ public class NewFragment extends Fragment implements View.OnClickListener {
         img.setOnClickListener(this);
 
 
-        call = (Button) view.findViewById(R.id.button4);
-        call.setText("CALL");
+        call = (ImageButton) view.findViewById(R.id.button4);
         call.setOnClickListener(this);
         fl.setAlpha(0);
+
         return view;
     }
 
@@ -83,6 +86,13 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
 
             case R.id.button4:
+                final Animation myAnim = AnimationUtils.loadAnimation(v.getContext(), R.anim.bounce);
+
+                // Using bounce interpolator with amplitude 0.4 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(0.4, 20);
+                myAnim.setInterpolator(interpolator);
+
+                v.startAnimation(myAnim);
                 if (haveNetworkConnection()) {
                     if (editText2.getText().toString() != null && editText1.getText().toString() != null) {
 
@@ -119,7 +129,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                     bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
 //                if (press) {
                   //  fl.setAlpha(0.5f);
-                    call.setVisibility(View.INVISIBLE);
+                   // call.setVisibility(View.INVISIBLE);
 
                     this.getFragmentManager().beginTransaction()
                             .addToBackStack(null)

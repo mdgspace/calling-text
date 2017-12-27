@@ -25,12 +25,14 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="18dp"
-        android:hint="  Name here"
+        android:hint="Name here"
         android:background="#66A3FF"
         android:id="@+id/favAddName"
-        android:textColor="#FFFFFF"
         android:visibility="invisible"
         android:textColorHint="#D9D9D9"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"
         android:layout_height="40dp"
         />
     <android.support.design.widget.FloatingActionButton
@@ -42,6 +44,7 @@
         app:elevation="10dp"
         android:id="@+id/favoriteFab"
         android:layout_marginBottom="10dp"
+        app:layout_behavior="com.sdsmdg.pulkit.callingtext.Scrolling_Floating_Action_Button.HideFabOnScroll"
         android:src="@drawable/ic_plus"/>
 
     <!-- Layout tomake the screen dim during search operations !-->

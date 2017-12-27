@@ -85,6 +85,7 @@ public class    FavouriteFragment extends Fragment{
                 }
                 else {
                     editText.setText("");
+                    editText.requestFocus();
                     mFavFab.setImageResource(R.drawable.tick1);
                     editText.setVisibility(View.VISIBLE);
                 }
