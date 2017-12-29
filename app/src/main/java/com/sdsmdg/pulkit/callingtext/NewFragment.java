@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,10 +36,11 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class NewFragment extends Fragment implements View.OnClickListener {
     private final int REQUEST_CODE = 1;
-    EditText editText1;
-    EditText editText2;
+    TextInputEditText editText1;
+    TextInputEditText editText2;
     String yourNumber, yourName;
     String receiver;
+    String s = "";
     String name;
     GifImageView img;
     public static FrameLayout fl, fl2;
@@ -57,8 +59,8 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.new_fragment, container, false);
-        editText1 = (EditText) view.findViewById(R.id.editText2); //number
-        editText2 = (EditText) view.findViewById(R.id.editText);//message
+        editText1 = (TextInputEditText) view.findViewById(R.id.editText2); //number
+        editText2 = (TextInputEditText) view.findViewById(R.id.editText);//message
         yourNumber = "7248187747";
         t1 = (TextView) view.findViewById(R.id.textView5);
         img = (GifImageView) view.findViewById(R.id.imageView3);
@@ -94,7 +96,11 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
                 v.startAnimation(myAnim);
                 if (haveNetworkConnection()) {
-                    if (editText2.getText().toString() != null && editText1.getText().toString() != null) {
+                   if( editText1.getText().toString().equals(s)) {
+                        Log.e("in else", "in else");
+                        Toast.makeText(getActivity(), "please type your number", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
 
                         BackGroundWorker b = new BackGroundWorker(getActivity(), 2);
                         Log.e("number", editText1.getText().toString());
@@ -114,9 +120,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
                         DataBaseHandler dbh=DataBaseHandler.getInstance(getContext());
                         dbh.addCaller(cd);
                         startActivity(callIntent);
-                    }else {
-                        Log.e("in else", "in else");
-                        Toast.makeText(getActivity(), "please type your message or number", Toast.LENGTH_SHORT).show();
                     }
                 } else
                     Toast.makeText(getActivity(), "you have no internet connection", Toast.LENGTH_SHORT).show();
