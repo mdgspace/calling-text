@@ -20,21 +20,44 @@
         android:layout_marginTop="34dp"/>
 
     </jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout>
-    <EditText
-        android:layout_width="300dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp"
-        android:hint="Name here"
-        android:background="#66A3FF"
-        android:id="@+id/favAddName"
-        android:visibility="invisible"
-        android:textColorHint="#D9D9D9"
-        android:textCursorDrawable="@drawable/color_cursor"
+
+    <LinearLayout
+        android:id="@+id/searchbaraddfav"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/round_corners"
+        android:orientation="horizontal"
         android:padding="10dp"
-        android:textColor="#FFFFFF"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:visibility="gone">
+
+    <ImageView
+        android:id="@+id/backbuttonaddfav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_arrow_back_black_24dp" />
+    <AutoCompleteTextView
+        android:hint="Add Favourite"
+        android:layout_width="0dp"
+        android:background="#FFFFFF"
+        android:id="@+id/favAddName"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:visibility="invisible"
+        android:inputType="textAutoComplete"
+        android:textSize="16sp"
+        android:textColorHint="#A1A1A1"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:textColor="#000000"
         android:layout_height="40dp"
         />
+    </LinearLayout>
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,5 +115,6 @@
             android:inputType="textAutoComplete"
             android:textColorHint="#A1A1A1"
             android:textSize="16sp" />
+
     </LinearLayout>
 </RelativeLayout>
