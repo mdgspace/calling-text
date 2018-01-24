@@ -28,9 +28,7 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     public android.support.v7.app.ActionBar actionBar;
-    FragmentManager fragmentManager;
-    GifModel fragment;
-    public static String mName, mNumber;
+    public static String mName, mNumber, TAG;
     public static Boolean calledByapp = false;
     public static List<ArrayList> savedContacts;
     public static ArrayList<PhoneContact> savedPhoneContacts;
@@ -49,7 +47,8 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         //to initialise all the global variables
         initVariables();
 
-        Log.e("Splash", "INININ");
+        TAG="Splash";
+        Log.e(TAG, "INININ");
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
         } else {

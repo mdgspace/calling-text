@@ -45,25 +45,24 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
 
     public RecyclerView recList;
-    ViewGroup contain;
-    public ImageButton button1;
-    Button button;
-    EditText et1;
-    static List<ArrayList> result;
-    View view,view1;
-    WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
-    private ImageView searchButton, settingsButton, backButton;
-    AutoCompleteTextView searchBox;
-    FrameLayout dimLayout;
-    LinearLayout searchLayout;
-    static ArrayList<PhoneContact> phoneContactsList;
-    PhoneSearchSuggestionAdapter adapter;
-    Toolbar toolbar;
-     ProgressDialog mProgress;
-    ScaleInAnimationAdapter alphaAdapter;
-    OnContactsLoaded onContactsLoaded;
-    ContactListAdapter ca;
-    int mShortDurationTime;
+    private static List<ArrayList> result;
+    private View view;
+    private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
+    private ImageView backButton;
+    private AutoCompleteTextView searchBox;
+    private FrameLayout dimLayout;
+    private LinearLayout searchLayout;
+    public static ArrayList<PhoneContact> phoneContactsList;
+    private PhoneSearchSuggestionAdapter adapter;
+    private ProgressDialog mProgress;
+    private ScaleInAnimationAdapter alphaAdapter;
+    private OnContactsLoaded onContactsLoaded;
+    private ContactListAdapter ca;
+    private int mShortDurationTime;
+    private static final String TAG1 = "p";
+    private static final String TAG2 = "OnClick";
+    private static final String TAG3 = "result";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +88,6 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
         view = inflater.inflate(R.layout.activity_contact_list, container, false);
         // init views
-        button1 = (ImageButton) view.findViewById(R.id.imageButton21);
         recList = (RecyclerView) view.findViewById(R.id.questionList_recycler);
         dimLayout = (FrameLayout) view.findViewById(R.id.dim_layout);
         searchLayout = (LinearLayout) view.findViewById(R.id.searchbar);
@@ -174,7 +172,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getBaseContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        Log.d("p", result + "");
+        Log.d(TAG1, result + "");
 
         // Setting the attributes of the search box
         searchBox.setThreshold(1);
@@ -255,12 +253,12 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         ContactListAdapter ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
-                Log.i("OnClick", "inside the onclick of the adapter");
+                Log.i(TAG2, "inside the onclick of the adapter");
                 Intent i = new Intent(getContext(), BaseActivity.class);
                 i.putExtra("pagenumber", "2");
-                Log.i("OnClick", "internt set !! ");
+                Log.i(TAG2, "internt set !! ");
                 startActivity(i);
-                Log.i("OnClick", "finisherererer");
+                Log.i(TAG2, "finisherererer");
                 getActivity().finish();
             }
         });
@@ -282,11 +280,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 contact = new ArrayList<>();
             }
         }
-        Log.i("result", contactList + "");
+        Log.i(TAG3, contactList + "");
         ContactListAdapter contactListAdapter = new ContactListAdapter(contactList, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
-                Log.i("OnClick", "inside the onclick of the adapter");
+                Log.i(TAG2, "inside the onclick of the adapter");
                 Intent intent = new Intent(getContext(), BaseActivity.class);
                 intent.putExtra("pagenumber", "2");
                 startActivity(intent);
@@ -431,12 +429,12 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
-                Log.i("OnClick", "inside the onclick of the adapter");
+                Log.i(TAG2, "inside the onclick of the adapter");
                 Intent i = new Intent(getContext(), BaseActivity.class);
                 i.putExtra("pagenumber", "2");
-                Log.d("OnClick", "internt set !! ");
+                Log.d(TAG2, "internt set !! ");
                 startActivity(i);
-                Log.d("OnClick", "finisherererer");
+                Log.d(TAG2, "finisherererer");
                 getActivity().finish();
             }
         });

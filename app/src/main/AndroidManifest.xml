@@ -43,13 +43,14 @@
         <activity
             android:name=".BaseActivity"
             android:label="Calling-Text"
-            android:theme="@style/bgImage">
+            android:theme="@style/BgImage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".PopupDialer"
             android:label="@string/title_activity_custom_dialog_box"
@@ -58,22 +59,10 @@
                 <action android:name="android.intent.action.CALL_PRIVILEGED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:scheme="tel" />
             </intent-filter>
         </activity>
 
-        <!--
-        <activity
-            android:name=".Splashactivity"
-            android:theme="@style/bgImage">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-!-->
         <activity
             android:name=".Settings"
             android:parentActivityName=".BaseActivity"
@@ -82,7 +71,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".BaseActivity" />
         </activity>
+
         <activity android:name=".LoginActivity" />
+
         <activity android:name=".RecentCalls" />
     </application>
 

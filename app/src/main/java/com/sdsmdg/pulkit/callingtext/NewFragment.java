@@ -35,11 +35,9 @@ import java.util.Date;
 import pl.droidsonroids.gif.GifImageView;
 
 public class NewFragment extends Fragment implements View.OnClickListener {
-    private final int REQUEST_CODE = 1;
-    TextInputEditText editText1;
+    TextInputEditText number;
     TextInputEditText editText2;
-    String yourNumber, yourName;
-    String receiver;
+    String yourNumber;
     String s = "";
     String name;
     GifImageView img;
@@ -51,22 +49,19 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     View view;
     ImageButton call;
    public static int gifNumber1;
-    private static final int CONTACTS_LOADER_ID = 1;
-    private WindowManager windowManager;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.new_fragment, container, false);
-        editText1 = (TextInputEditText) view.findViewById(R.id.editText2); //number
-        editText2 = (TextInputEditText) view.findViewById(R.id.editText);//message
+        number = (TextInputEditText) view.findViewById(R.id.phoneNumber); //number
+        editText2 = (TextInputEditText) view.findViewById(R.id.message);//message
         yourNumber = "7248187747";
         t1 = (TextView) view.findViewById(R.id.textView5);
         img = (GifImageView) view.findViewById(R.id.imageView3);
         if (BaseActivity.mNumber != null) {
             Log.i("Number selected ", BaseActivity.mNumber);
-            editText1.setText(BaseActivity.mNumber);
+            number.setText(BaseActivity.mNumber);
         }
 
         fl = (FrameLayout) view.findViewById(R.id.color);
@@ -96,27 +91,27 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
                 v.startAnimation(myAnim);
                 if (haveNetworkConnection()) {
-                   if( editText1.getText().toString().equals(s)) {
+                   if( number.getText().toString().equals(s)) {
                         Log.e("in else", "in else");
                         Toast.makeText(getActivity(), "please type your number", Toast.LENGTH_SHORT).show();
                     }
                     else{
 
                         BackGroundWorker b = new BackGroundWorker(getActivity(), 2);
-                        Log.e("number", editText1.getText().toString());
+                        Log.e("number", number.getText().toString());
 
-                        b.execute(yourNumber, editText1.getText().toString(), editText2.getText().toString(), String.valueOf(gifNumber1));
+                        b.execute(yourNumber, number.getText().toString(), editText2.getText().toString(), String.valueOf(gifNumber1));
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
 
                         BaseActivity.calledByapp = true;
-                        callIntent.setData(Uri.parse("tel:" + editText1.getText().toString()));
-                        Log.e("receiver", "tel:" + editText1.getText().toString());
+                        callIntent.setData(Uri.parse("tel:" + number.getText().toString()));
+                        Log.e("receiver", "tel:" + number.getText().toString());
                         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(BackGroundWorker.value));
                         Cursor phones = getActivity().getContentResolver().query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
                         while (phones.moveToNext()) {
                             name = phones.getString(phones.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
                         }
-                        CallerDetails cd = new CallerDetails(name,editText1.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()),null);
+                        CallerDetails cd = new CallerDetails(name,number.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()),null);
                         DataBaseHandler dbh=DataBaseHandler.getInstance(getContext());
                         dbh.addCaller(cd);
                         startActivity(callIntent);
