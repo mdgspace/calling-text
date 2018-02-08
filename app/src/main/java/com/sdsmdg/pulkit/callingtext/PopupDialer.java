@@ -17,14 +17,14 @@ import android.widget.Toast;
 
 import pl.droidsonroids.gif.GifImageView;
 
-public class PopupDialer extends AppCompatActivity implements GifFragment.onImageselectionListener {
+public class PopupDialer extends AppCompatActivity implements GifModel.onImageselectionListener {
 
     private final String LOG_TAG = "PopupDialer";
     public static int gifNumber1 = 1;
     public static final String TAG = "POPUP";
     EditText ediTextMessage;
     GifImageView gifImageView;
-    GifFragment fragment;
+    GifModel fragment;
     Button call;
     RelativeLayout mRelativeLayout;
     String number, message, yourNumber;
@@ -158,7 +158,7 @@ public class PopupDialer extends AppCompatActivity implements GifFragment.onImag
             @Override
             public void onClick(View v) {
                 call.setVisibility(View.INVISIBLE);
-                GifFragment gifFragment = new GifFragment();
+                GifModel gifFragment = new GifModel();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.bottom2, gifFragment)
                         .addToBackStack(null)

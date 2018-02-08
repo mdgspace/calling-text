@@ -59,7 +59,6 @@ public class LoginActivity extends AppCompatActivity {
         else
             Toast.makeText(this, "Login failed due to empty fields", Toast.LENGTH_SHORT).show();
 
-
     }
 
 

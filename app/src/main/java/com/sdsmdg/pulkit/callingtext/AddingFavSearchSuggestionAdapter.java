@@ -1,3 +1,4 @@
+
 package com.sdsmdg.pulkit.callingtext;
 
 import android.content.Context;
@@ -14,22 +15,18 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Harshit Bansal on 5/26/2017.
- */
-
-public class PhoneSearchSuggestionAdapter extends ArrayAdapter<PhoneContact> {
-
+public class AddingFavSearchSuggestionAdapter extends ArrayAdapter<PhoneContact> {
     private ArrayList<PhoneContact> suggestions;
     private int layoutId;
+    int orangeColor = getContext().getResources().getColor(R.color.dark_orange);
+    String color = Integer.toString(orangeColor);
     private LayoutInflater mInflater;
     private String queryString;
     private ArrayList<PhoneContact> phoneContacts;
-    private final ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor("#be5e00"));
+    private final ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor(color));
 
-    public PhoneSearchSuggestionAdapter(Context context, int resource, ArrayList<PhoneContact> phoneContacts) {
+    public AddingFavSearchSuggestionAdapter(Context context, int resource, ArrayList<PhoneContact> phoneContacts) {
         super(context, resource);
         this.suggestions = new ArrayList<>();
         this.phoneContacts = phoneContacts;
@@ -44,8 +41,8 @@ public class PhoneSearchSuggestionAdapter extends ArrayAdapter<PhoneContact> {
         if (convertView == null) {
             convertView = mInflater.inflate(layoutId, parent, false);
             holder = new ViewHolder();
-            holder.name = (TextView) convertView.findViewById(R.id.list_item_name);
-            holder.phone = (TextView) convertView.findViewById(R.id.list_item_phone);
+            holder.name = (TextView) convertView.findViewById(R.id.list_item_name_add_fav);
+            holder.phone = (TextView) convertView.findViewById(R.id.list_item_phone_add_fav);
             convertView.setTag(holder);
         }
         else{
@@ -119,4 +116,4 @@ public class PhoneSearchSuggestionAdapter extends ArrayAdapter<PhoneContact> {
             }
         }
     };
-}
+} 

@@ -4,67 +4,88 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 
-public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener,GifFragment.onImageselectionListener, ContactListFragment.OnContactsLoaded {
+public class BaseActivity extends AppCompatActivity implements ActionBar.TabListener, GifModel.onImageselectionListener, ContactListFragment.OnContactsLoaded {
+
+    int PERMISSIONS_REQUEST_CODE = 1;
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     public android.support.v7.app.ActionBar actionBar;
-    FragmentManager fragmentManager;
-    GifFragment fragment;
-    public static String mName, mNumber;
+    public static String mName, mNumber, TAG;
     public static Boolean calledByapp = false;
     public static List<ArrayList> savedContacts;
     public static ArrayList<PhoneContact> savedPhoneContacts;
     //session manager class
     SessionManager session;
-    private TabLayout tabLayout;
+    public static TabLayout tabLayout;
     public static int[] imageIds;
     public static String receiver = "7248187747";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+
         //to initialise all the global variables
         initVariables();
-        session.checkLogIn();//check login session
+
+        TAG="Splash";
+        Log.e(TAG, "INININ");
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermissions();
+        } else {
+            session.checkLogIn();
+        }
+
         setListenersAndAdapters();
         setImageIds();
 
         // To retain the contact list when the device is rotated
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             savedPhoneContacts = savedInstanceState.getParcelableArrayList("phoneContactsList");
-            for(PhoneContact phoneContact : savedPhoneContacts){
-                ArrayList<String> a =new ArrayList<>();
+            for (PhoneContact phoneContact : savedPhoneContacts) {
+                ArrayList<String> a = new ArrayList<>();
                 a.add(phoneContact.name);
                 a.add(phoneContact.phone);
                 savedContacts.add(a);
             }
         }
 
+
         TelephonyManager telephoneManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+
+        //to check if permission for call is available
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         String mPhoneNumber = telephoneManager.getLine1Number();
         Log.e("MY BA NO.", "PHONE NO." + mPhoneNumber);
-      
+
         int pg_number = 0;
 
         if (getIntent().getExtras() != null) {
@@ -81,15 +102,49 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         startService(new Intent(this, BackgroundService.class));
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        boolean allGranted = true;
+
+        if (grantResults.length > 0) {
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
+                }
+            }
+        }
+        if (allGranted) {
+            session.checkLogIn();//check login session
+        } else {
+            Toast.makeText(this, "Please grant the requested permissions.", Toast.LENGTH_SHORT).show();
+            session.checkLogIn();//check login session
+        }
+    }
+
     private void call(String s) {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + s));
         try {
+            //to check if permission for call is available
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             startActivity(callIntent);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(BaseActivity.this, "yourActivity is not found", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -120,10 +175,32 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         }
     }
 
+
+
     @Override
     public void saveContacts(List<ArrayList> contactsList, ArrayList<PhoneContact> phoneContacts) {
         savedContacts = contactsList;
         savedPhoneContacts = phoneContacts;
+    }
+
+   //this function asks for certain permissions from the user
+    public void requestPermissions() {
+        String[] permissions = {
+                android.Manifest.permission.INTERNET,
+                android.Manifest.permission.ACCESS_NETWORK_STATE,
+                android.Manifest.permission.RECEIVE_SMS,
+                android.Manifest.permission.READ_SMS,
+                android.Manifest.permission.SEND_SMS,
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.WRITE_CONTACTS,
+                android.Manifest.permission.CALL_PHONE,
+                android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.SYSTEM_ALERT_WINDOW,
+                android.Manifest.permission.PROCESS_OUTGOING_CALLS
+
+        };
+        ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_CODE);
     }
 
     @Override
@@ -144,8 +221,9 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
      */
     private void initVariables(){
         //session class instance
-        session = new SessionManager(getApplicationContext());
+        session = new SessionManager(this);
         viewPager = (ViewPager) findViewById(R.id.pager);
+
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         tabLayout = (TabLayout) findViewById(R.id.tabs);
     }
@@ -199,5 +277,6 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     public static ArrayList<PhoneContact> getSavedPhoneContacts(){
         return savedPhoneContacts;
     }
+
 
 }

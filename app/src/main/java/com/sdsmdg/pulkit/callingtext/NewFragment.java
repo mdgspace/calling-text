@@ -8,6 +8,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,11 +35,10 @@ import java.util.Date;
 import pl.droidsonroids.gif.GifImageView;
 
 public class NewFragment extends Fragment implements View.OnClickListener {
-    private final int REQUEST_CODE = 1;
-    EditText editText1;
-    EditText editText2;
-    String yourNumber, yourName;
-    String receiver;
+    TextInputEditText number;
+    TextInputEditText editText2;
+    String yourNumber;
+    String s = "";
     String name;
     GifImageView img;
     public static FrameLayout fl, fl2;
@@ -41,38 +46,34 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     Boolean press = false;
     android.support.v4.app.FragmentManager fragmentManager;
     TextView t1;
-    GifFragment fragment;
     View view;
-    Button call;
-    public static int gifNumber1;
-    private static final int CONTACTS_LOADER_ID = 1;
-    private WindowManager windowManager;
-
+    ImageButton call;
+   public static int gifNumber1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // setSupportActionBar(toolbar);
+
         View view = inflater.inflate(R.layout.new_fragment, container, false);
-        editText1 = (EditText) view.findViewById(R.id.editText2); //number
-        editText2 = (EditText) view.findViewById(R.id.editText);//message
-//        editName = (EditText) view.findViewById(R.id.editText3); //name
+        number = (TextInputEditText) view.findViewById(R.id.phoneNumber); //number
+        editText2 = (TextInputEditText) view.findViewById(R.id.message);//message
         yourNumber = "7248187747";
         t1 = (TextView) view.findViewById(R.id.textView5);
         img = (GifImageView) view.findViewById(R.id.imageView3);
         if (BaseActivity.mNumber != null) {
             Log.i("Number selected ", BaseActivity.mNumber);
-            editText1.setText(BaseActivity.mNumber);
+            number.setText(BaseActivity.mNumber);
         }
 
         fl = (FrameLayout) view.findViewById(R.id.color);
         fl2 = (FrameLayout) view.findViewById(R.id.bottom);
         rl = (RelativeLayout) view.findViewById(R.id.my_layout);
         img.setOnClickListener(this);
-        call = (Button) view.findViewById(R.id.button4);
-        call.setText("CALL");
+
+
+        call = (ImageButton) view.findViewById(R.id.button4);
         call.setOnClickListener(this);
         fl.setAlpha(0);
+
         return view;
     }
 
@@ -82,57 +83,59 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
 
             case R.id.button4:
+                final Animation myAnim = AnimationUtils.loadAnimation(v.getContext(), R.anim.bounce);
+
+                // Using bounce interpolator with amplitude 0.4 and frequency 20
+                MyBounceInterpolator interpolator = new MyBounceInterpolator(0.4, 20);
+                myAnim.setInterpolator(interpolator);
+
+                v.startAnimation(myAnim);
                 if (haveNetworkConnection()) {
-                    if (editText2.getText().toString() != null && editText1.getText().toString() != null) {
+                   if( number.getText().toString().equals(s)) {
+                        Log.e("in else", "in else");
+                        Toast.makeText(getActivity(), "please type your number", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
 
                         BackGroundWorker b = new BackGroundWorker(getActivity(), 2);
-                        Log.e("number", editText1.getText().toString());
+                        Log.e("number", number.getText().toString());
 
-                        b.execute(yourNumber, editText1.getText().toString(), editText2.getText().toString(), String.valueOf(gifNumber1));
+                        b.execute(yourNumber, number.getText().toString(), editText2.getText().toString(), String.valueOf(gifNumber1));
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
 
                         BaseActivity.calledByapp = true;
-                        callIntent.setData(Uri.parse("tel:" + editText1.getText().toString()));
-                        Log.e("receiver", "tel:" + editText1.getText().toString());
+                        callIntent.setData(Uri.parse("tel:" + number.getText().toString()));
+                        Log.e("receiver", "tel:" + number.getText().toString());
                         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(BackGroundWorker.value));
                         Cursor phones = getActivity().getContentResolver().query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
                         while (phones.moveToNext()) {
                             name = phones.getString(phones.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
                         }
-                        CallerDetails cd = new CallerDetails(name,editText1.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()),null);
+                        CallerDetails cd = new CallerDetails(name,number.getText().toString(),editText2.getText().toString(),"outgoing", String.valueOf(new Date().getTime()),null);
                         DataBaseHandler dbh=DataBaseHandler.getInstance(getContext());
                         dbh.addCaller(cd);
                         startActivity(callIntent);
-                    }else {
-                        Log.e("in else", "in else");
-                        Toast.makeText(getActivity(), "please type your message or number", Toast.LENGTH_SHORT).show();
                     }
                 } else
                     Toast.makeText(getActivity(), "you have no internet connection", Toast.LENGTH_SHORT).show();
                 Log.e("call", "call");
 
                 break;
-            case R.id.imageView3:
-                GifFragment gifFragment = new GifFragment();
+
+                case R.id.imageView3:
+                    BottomSheetDialogFragment bottomSheetDialogFragment = new GifModel();
+                    bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
 //                if (press) {
-                    fl.setAlpha(0.5f);
-                    call.setVisibility(View.INVISIBLE);
+                  //  fl.setAlpha(0.5f);
+                   // call.setVisibility(View.INVISIBLE);
+
                     this.getFragmentManager().beginTransaction()
-                            .replace(R.id.bottom, gifFragment, null)
                             .addToBackStack(null)
                             .commit();
                     press = !press;
-//                } else {
-//                    fl.setAlpha(0);
-//                    this.getFragmentManager().beginTransaction()
-//                            .detach(gifFragment)
-//                            .addToBackStack(null)
-//                            .commit();
-//                    press = !press;
-//                }
-
 
                 break;
+
             default:
                 break;
 
@@ -148,7 +151,7 @@ public class NewFragment extends Fragment implements View.OnClickListener {
 
     public void setImage(int gifNumber) {
         fl.setAlpha(0);
-        gifNumber1 = gifNumber;
+       gifNumber1 = gifNumber;
         img.setImageResource(BaseActivity.imageIds[gifNumber1-1]);
         call.setVisibility(View.VISIBLE);
     }
@@ -205,8 +208,6 @@ public class NewFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.i("NewFragment", "Attached");
-//        editName.setText(BaseActivity.getmName());
-
 
     }
 

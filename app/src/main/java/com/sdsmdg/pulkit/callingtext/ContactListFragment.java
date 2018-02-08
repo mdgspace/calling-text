@@ -1,6 +1,7 @@
 package com.sdsmdg.pulkit.callingtext;
 
 import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -43,30 +45,31 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
 
 
     public RecyclerView recList;
-    public ImageButton button1;
-    Button button;
-    EditText et1;
-    static List<ArrayList> result;
-    View view;
-    WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
-    private ImageView searchButton, settingsButton, backButton;
-    AutoCompleteTextView searchBox;
-    FrameLayout dimLayout;
-    LinearLayout searchLayout;
-    ArrayList<PhoneContact> phoneContactsList;
-    PhoneSearchSuggestionAdapter adapter;
-    Toolbar toolbar;
-    ProgressDialog mProgress;
-    ScaleInAnimationAdapter alphaAdapter;
-    OnContactsLoaded onContactsLoaded;
-    ContactListAdapter ca;
-    int mShortDurationTime;
+    private static List<ArrayList> result;
+    private View view;
+    private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
+    private ImageView backButton;
+    private AutoCompleteTextView searchBox;
+    private FrameLayout dimLayout;
+    private LinearLayout searchLayout;
+    public static ArrayList<PhoneContact> phoneContactsList;
+    private PhoneSearchSuggestionAdapter adapter;
+    private ProgressDialog mProgress;
+    private ScaleInAnimationAdapter alphaAdapter;
+    private OnContactsLoaded onContactsLoaded;
+    private ContactListAdapter ca;
+    private int mShortDurationTime;
+    private static final String TAG1 = "p";
+    private static final String TAG2 = "OnClick";
+    private static final String TAG3 = "result";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -84,9 +87,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.activity_contact_list, container, false);
-
         // init views
-        button1 = (ImageButton) view.findViewById(R.id.imageButton21);
         recList = (RecyclerView) view.findViewById(R.id.questionList_recycler);
         dimLayout = (FrameLayout) view.findViewById(R.id.dim_layout);
         searchLayout = (LinearLayout) view.findViewById(R.id.searchbar);
@@ -116,7 +117,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             }
         });
 
-        // Dim layout which is present during search operattions
+        // Dim layout which is present during search operations
         dimLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,7 +172,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getBaseContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        Log.d("p", result + "");
+        Log.d(TAG1, result + "");
 
         // Setting the attributes of the search box
         searchBox.setThreshold(1);
@@ -191,6 +192,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 new Task().execute();
             }
         });
+
         return view;
     }
 
@@ -251,12 +253,12 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         ContactListAdapter ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
-                Log.i("OnClick", "inside the onclick of the adapter");
+                Log.i(TAG2, "inside the onclick of the adapter");
                 Intent i = new Intent(getContext(), BaseActivity.class);
                 i.putExtra("pagenumber", "2");
-                Log.i("OnClick", "internt set !! ");
+                Log.i(TAG2, "internt set !! ");
                 startActivity(i);
-                Log.i("OnClick", "finisherererer");
+                Log.i(TAG2, "finisherererer");
                 getActivity().finish();
             }
         });
@@ -278,11 +280,11 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
                 contact = new ArrayList<>();
             }
         }
-        Log.i("result", contactList + "");
+        Log.i(TAG3, contactList + "");
         ContactListAdapter contactListAdapter = new ContactListAdapter(contactList, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
-                Log.i("OnClick", "inside the onclick of the adapter");
+                Log.i(TAG2, "inside the onclick of the adapter");
                 Intent intent = new Intent(getContext(), BaseActivity.class);
                 intent.putExtra("pagenumber", "2");
                 startActivity(intent);
@@ -306,6 +308,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             case R.id.action_search_icon:
                 dimLayout.setVisibility(View.VISIBLE);
                 searchLayout.setVisibility(View.VISIBLE);
+                searchLayout.bringToFront();
                 InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 manager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
                 searchBox.requestFocus();
@@ -327,6 +330,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         protected void onPreExecute() {
             super.onPreExecute();
             mProgress.show();
+            mProgress.dismiss();
         }
 
         @Override
@@ -334,6 +338,7 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             contactsList = createList();
             return contactsList;
         }
+
 
         private List<ArrayList> createList() {
             phoneContactsList = new ArrayList<PhoneContact>();
@@ -424,12 +429,12 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
         ca = new ContactListAdapter(result, getActivity(), new ContactListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick() {
-                Log.i("OnClick", "inside the onclick of the adapter");
+                Log.i(TAG2, "inside the onclick of the adapter");
                 Intent i = new Intent(getContext(), BaseActivity.class);
                 i.putExtra("pagenumber", "2");
-                Log.d("OnClick", "internt set !! ");
+                Log.d(TAG2, "internt set !! ");
                 startActivity(i);
-                Log.d("OnClick", "finisherererer");
+                Log.d(TAG2, "finisherererer");
                 getActivity().finish();
             }
         });
