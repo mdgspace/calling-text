@@ -20,11 +20,10 @@ public class AddingFavSearchSuggestionAdapter extends ArrayAdapter<PhoneContact>
     private ArrayList<PhoneContact> suggestions;
     private int layoutId;
     int orangeColor = getContext().getResources().getColor(R.color.dark_orange);
-    String color = Integer.toString(orangeColor);
     private LayoutInflater mInflater;
     private String queryString;
     private ArrayList<PhoneContact> phoneContacts;
-    private final ForegroundColorSpan fcs = new ForegroundColorSpan(Color.parseColor(color));
+    private final ForegroundColorSpan fcs = new ForegroundColorSpan(orangeColor);
 
     public AddingFavSearchSuggestionAdapter(Context context, int resource, ArrayList<PhoneContact> phoneContacts) {
         super(context, resource);

@@ -1,17 +1,22 @@
 package com.sdsmdg.pulkit.callingtext;
 
+import android.*;
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -346,6 +351,10 @@ public class ContactListFragment extends Fragment implements LoaderManager.Loade
             // Code for contacts retrieval
             // Display the contacts in ascending order
             ContentResolver cr = getContext().getContentResolver();
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED){
+                return contactsList;
+            }
             Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                     null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 

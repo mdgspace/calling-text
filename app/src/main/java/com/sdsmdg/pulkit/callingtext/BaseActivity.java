@@ -58,20 +58,6 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
         setListenersAndAdapters();
         setImageIds();
 
-        // To retain the contact list when the device is rotated
-        if (savedInstanceState != null) {
-            savedPhoneContacts = savedInstanceState.getParcelableArrayList("phoneContactsList");
-            for (PhoneContact phoneContact : savedPhoneContacts) {
-                ArrayList<String> a = new ArrayList<>();
-                a.add(phoneContact.name);
-                a.add(phoneContact.phone);
-                savedContacts.add(a);
-            }
-        }
-
-
-        TelephonyManager telephoneManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-
         //to check if permission for call is available
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -83,6 +69,20 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
+        // To retain the contact list when the device is rotated
+        if (savedInstanceState != null) {
+            savedPhoneContacts = savedInstanceState.getParcelableArrayList("phoneContactsList");
+            for (PhoneContact phoneContact : savedPhoneContacts) {
+                ArrayList<String> a = new ArrayList<>();
+                a.add(phoneContact.name);
+                a.add(phoneContact.phone);
+                savedContacts.add(a);
+            }
+        }
+
+        TelephonyManager telephoneManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+
         String mPhoneNumber = telephoneManager.getLine1Number();
         Log.e("MY BA NO.", "PHONE NO." + mPhoneNumber);
 
@@ -106,11 +106,14 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+        Log.d("lololo", "took permissions");
+
         boolean allGranted = true;
 
         if (grantResults.length > 0) {
             for (int grantResult : grantResults) {
                 if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("lololo", String.valueOf(grantResult));
                     allGranted = false;
                     break;
                 }
@@ -198,7 +201,6 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
                 android.Manifest.permission.READ_PHONE_STATE,
                 android.Manifest.permission.SYSTEM_ALERT_WINDOW,
                 android.Manifest.permission.PROCESS_OUTGOING_CALLS
-
         };
         ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_CODE);
     }
