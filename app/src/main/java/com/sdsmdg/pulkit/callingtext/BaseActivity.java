@@ -166,11 +166,16 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
 
     @Override
     public void onImageSelection(String position) {
+        NewFragment newFragment = null;
         Log.e("in Imageselection", "in !!!!");
-        Log.e("in null", getSupportFragmentManager().getFragments().get(0).getTag());
-        NewFragment newFragment = (NewFragment)
-                getSupportFragmentManager().getFragments().get(2
-                );
+        int n = getSupportFragmentManager().getFragments().toArray().length;
+        for (int i = n-1; i >= 0; i--){
+            String classname = "" + getSupportFragmentManager().getFragments().get(i).getClass();
+            if (classname.contains("NewFragment")){
+                newFragment = (NewFragment) getSupportFragmentManager().getFragments().get(i);
+                break;
+            }
+        }
 
         if (newFragment != null) {
             Log.e("in null", "in null");
