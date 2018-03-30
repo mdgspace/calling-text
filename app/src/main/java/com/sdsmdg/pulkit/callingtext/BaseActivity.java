@@ -106,14 +106,11 @@ public class BaseActivity extends AppCompatActivity implements ActionBar.TabList
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        Log.d("lololo", "took permissions");
-
         boolean allGranted = true;
 
         if (grantResults.length > 0) {
             for (int grantResult : grantResults) {
                 if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    Log.d("lololo", String.valueOf(grantResult));
                     allGranted = false;
                     break;
                 }
