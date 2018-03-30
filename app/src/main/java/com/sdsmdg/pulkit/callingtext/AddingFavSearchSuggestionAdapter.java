@@ -2,7 +2,6 @@
 package com.sdsmdg.pulkit.callingtext;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
