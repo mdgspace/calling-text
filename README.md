@@ -1,6 +1,7 @@
 # Calling Text
 [![platform](https://img.shields.io/badge/platform-Android-green.svg)](https://www.android.com)
-[![by-SDS-MDG](https://img.shields.io/badge/by-SDS%2C%20MDG-red.svg)](https://mdg.sdslabs.co)
+[![by-SDS-MDG](https://img.shields.io/badge/by-MDG%20IITR-blue.svg)](http://mdg.iitr.ac.in)
+[![Build Status](https://travis-ci.org/sdsmdg/calling_text.svg?branch=master)](https://travis-ci.org/sdsmdg/calling_text)
 
 Calling Text is a smart calling assistant to enhance the calling experience of users. It helps you know the context of a call even before picking up. Finally you can stop pondering why someone called you!
 
