@@ -1,8 +1,6 @@
 package com.sdsmdg.pulkit.callingtext;
 
 import android.app.Activity;
-import android.media.Image;
-import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -14,7 +14,6 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Harshit Bansal on 5/26/2017.
